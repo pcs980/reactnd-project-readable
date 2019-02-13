@@ -24,6 +24,17 @@ const defaultData = {
     voteScore: -5,
     deleted: false,
     commentCount: 0
+  },
+  "5c9qojr2d1738zlx09afby": {
+    id: '5c9qojr2d1738zlx09afby',
+    timestamp: 1518043995650,
+    title: 'Be fullstack with Node and React!',
+    body: 'You can build awesome applications with only javascript.',
+    author: 'thingthree',
+    category: 'node',
+    voteScore: 3,
+    deleted: false,
+    commentCount: 0
   }
 }
 
