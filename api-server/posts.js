@@ -31,7 +31,7 @@ const defaultData = {
     title: 'Be fullstack with Node and React!',
     body: 'You can build awesome applications with only javascript.',
     author: 'thingthree',
-    category: 'node',
+    category: 'react',
     voteScore: 3,
     deleted: false,
     commentCount: 0

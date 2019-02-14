@@ -1,12 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import LoadingBar from 'react-redux-loading';
-import {Container, Grid, Header} from 'semantic-ui-react';
+import {Container, Grid} from 'semantic-ui-react';
 
-import {handleInitialData} from '../actions';
-import {changeCategory} from '../actions/categories';
+import {handleInitialData} from '../actions/shared';
+import {changeCategory, sortPosts} from '../actions/shared';
 
+import TopBar from './TopBar';
 import CategoryMenu from './CategoryMenu';
+import PostList from './PostList';
 
 class App extends React.Component {
 
@@ -14,25 +16,25 @@ class App extends React.Component {
     this.props.dispatch(changeCategory(menu));
   };
 
+  handleSortPosts = (sortBy) => {
+    this.props.dispatch(sortPosts(sortBy));
+  };
+
   componentDidMount() {
     this.props.dispatch(handleInitialData());
-  }
+  };
 
   render() {
     return (
       <Container>
         <LoadingBar />
-        <Header as='h2'>
-          <Header.Content>
-            Readable
-          </Header.Content>
-        </Header>
-        <Grid>
+        <TopBar />
+        <Grid columns={2}>
           <Grid.Column width={4}>
             <CategoryMenu menuClick={this.handleMenuClick}/>
           </Grid.Column>
-          <Grid.Column heigth={20}>
-
+          <Grid.Column width={12}>
+            <PostList sortClick={this.handleSortPosts}/>
           </Grid.Column>
         </Grid>
       </Container>
