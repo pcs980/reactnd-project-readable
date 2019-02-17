@@ -1,8 +1,8 @@
 import {showLoading, hideLoading} from 'react-redux-loading';
 import {getInitialData} from '../utils/api';
 
-import {getAllPosts} from './posts';
-import {getAllCategories} from './categories';
+import {storePosts} from './posts';
+import {storeCategories} from './categories';
 
 export const CHANGE_CATEGORY = 'CHANGE_CATEGORY';
 export const SORT_POSTS = 'SORT_POSTS';
@@ -26,19 +26,25 @@ export const handleInitialData = () => (dispatch) => {
   return getInitialData()
     .then((data) => {
       const posts = data[1].data;
-      const categories = data[0].data.categories;
 
-      // Get all categories and posts
-      dispatch(getAllCategories(categories));
-      dispatch(getAllPosts(posts));
+      // Add category all to show all posts
+      let categories = [{
+        name: 'all',
+        path: ''
+      }];
 
-      // Sort posts by timestamp as default
+      // Then add each category received
+      categories = categories.concat(data[0].data.categories);
+
+      // Store all categories and posts
+      dispatch(storeCategories(categories));
+      dispatch(storePosts(posts));
+
+      // Set timestamp as default sort field
       dispatch(sortPosts('timestamp'));
 
-      // Assume the first category as active
-      if (categories.length > 0) {
-        dispatch(changeCategory(categories[0].name));
-      }
+      // Assume the first category (all) as active
+      dispatch(changeCategory(categories[0].name));
 
       dispatch(hideLoading());
     });
