@@ -6,24 +6,26 @@ import {Icon, Menu} from 'semantic-ui-react';
 const sortParameters = [
   {
     caption: 'Title',
+    type: 'alphabet',
     field: 'title'
   },
   {
     caption: 'Score',
+    type: 'numeric',
     field: 'voteScore'
   },
   {
     caption: 'Date',
+    type: 'numeric',
     field: 'timestamp'
   }
 ];
 
 // TODO: add 'New post' button and search field
 const ListControl = (props) => (
-  <Menu fluid borderless secondary size='small'>
-    <Menu.Item as={Link} to='/new'>
-      <Icon name='write'/>
-      New Post
+  <Menu fluid borderless secondary size='small' icon>
+    <Menu.Item as={Link} to='/write'>
+      <Icon name='file'/> New Post
     </Menu.Item>
 
     <Menu.Menu position='right'>
@@ -34,10 +36,10 @@ const ListControl = (props) => (
             link
             key={param.field}
             onClick={() => props.sortClick(param.field)}
-            color='teal'
-            active={props.shared.sortBy === param.field}>
+            color='orange'
+            active={props.sortBy === param.field}>
               <Icon
-                name={`sort content ${props.shared.order || 'ascending'}`} />
+                name={`sort ${param.type} ${props.order || 'ascending'}`} />
             {param.caption}
           </Menu.Item>
         ))
@@ -48,7 +50,8 @@ const ListControl = (props) => (
 
 const mapStateToProps = ({shared}) => {
   return {
-    shared
+    sortBy: shared.sortBy,
+    order: shared.order
   };
 }
 

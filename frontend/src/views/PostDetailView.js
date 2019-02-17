@@ -1,191 +1,114 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {Container, Form, Icon, Label, Menu} from 'semantic-ui-react';
+import {Link, withRouter} from 'react-router-dom';
+import {Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
 
 import CommentList from '../components/CommentList';
+import Thermometer from '../components/Thermometer';
+import CustomLabel from '../components/CustomLabel';
+import {formatDate} from '../utils/format';
 
-import {handleSavePost} from '../actions/posts';
+import {handleDeleteComment, handleRateComment, handleSaveComment} from '../actions/comments';
+import {handleRatePost, incrementComment, decrementComment} from '../actions/posts';
 
 class PostDetailView extends React.Component {
-  state = {
-    author: '',
-    body: '',
-    category: '',
-    commentCount: 0,
-    deleted: false,
-    id: '',
-    timestamp: '',
-    title: '',
-    voteScore: 1,
-    authorError: false,
-    bodyError: false,
-    categoryError: false,
-    titleError: false
+
+  ratePost= (id, option) => {
+    this.props.dispatch(handleRatePost(id, option));
   };
 
-  handleChange = (e, {name, value}) => {
-    this.setState({
-      [name]: value.trim()
-    });
+  saveComment = (comment) => {
+    this.props.dispatch(handleSaveComment(comment))
+      .then(() => this.props.dispatch(incrementComment(this.props.post.id)));
   };
 
-  submitPost = () => {
-    const authorError = (this.state.author === '');
-    const bodyError = (this.state.body === '');
-    const categoryError = (this.state.category === '');
-    const titleError = (this.state.title === '');
-
-    if (authorError || bodyError || categoryError || titleError) {
-      this.setState({
-        authorError,
-        bodyError,
-        categoryError,
-        titleError
-      });
-    } else {
-      const post = {
-        author: this.state.author,
-        body: this.state.body,
-        category: this.state.category.toLowerCase(),
-        title: this.state.title
-      }
-      this.props.dispatch(handleSavePost(post));
-    }
+  rateComment = (id, option) => {
+    this.props.dispatch(handleRateComment(id, option))
   };
 
-  static getDerivedStateFromProps(props, state) {
-    const {post} = props;
-    if (post) {
-      const {author, body, category, commentCount, deleted, id, timestamp, title, voteScore} = post;
-      return {
-        author,
-        body,
-        category,
-        commentCount,
-        deleted,
-        id,
-        timestamp,
-        title,
-        voteScore
-      };
-    }
-    return null;
-  }
+  deleteComment = (id) => {
+    this.props.dispatch(handleDeleteComment(id))
+      .then(() => this.props.dispatch(decrementComment(this.props.post.id)));
+  };
 
   render() {
-    const {action} = this.props;
-    const {id, authorError, bodyError, categoryError, titleError} = this.state;
+    const {post} = this.props;
     return (
-      <Container>
-        <Menu borderless secondary>
-          <Menu.Item header as='h3'>{action}</Menu.Item>
-          {
-            action.startsWith('Edit') && (
-              <Menu.Item as={Link} to='/new' position='right'>
-                <Icon name='write'/>
-                New Post
-              </Menu.Item>
-            )
-          }
-        </Menu>
-        <Form onSubmit={this.submitPost}>
-          <Form.Group widths='equal'>
-            <Form.Field width={10}>
-              <Form.Input
-                name='title'
-                label='Title'
-                placeholder='Your flashy post title'
-                value={this.state.title}
-                maxLength={40}
-                onChange={this.handleChange}/>
-              {
-                titleError === true && (
-                  <Label pointing basic color='red'>Please enter a title</Label>
-                )
-              }
-            </Form.Field>
-            <Form.Field width={4}>
-              <Form.Select
-                name='category'
-                label='Category'
-                placeholder='Category'
-                value={this.state.category}
-                options={this.props.categories}
-                onChange={this.handleChange}/>
-              {
-                categoryError === true && (
-                  <Label pointing basic color='red'>Please select a category</Label>
-                )
-              }
-            </Form.Field>
-          </Form.Group>
-          <Form.Field>
-            <Form.TextArea
-              name='body'
-              label='Post'
-              placeholder='Open your hearth and write your post ;)'
-              value={this.state.body}
-              onChange={this.handleChange}
-              maxLength={200}
-              rows={4}
-              autoHeight/>
-            {
-              bodyError === true && (
-                <Label pointing basic color='red' >Please write a post</Label>
-              )
-            }
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              name='author'
-              label='Author'
-              placeholder='Let us know who you are'
-              value={this.state.author}
-              onChange={this.handleChange}
-              maxLength={20}/>
-            {
-              authorError === true && (
-                <Label pointing basic color='red' >Please tell us your user name</Label>
-              )
-            }
-          </Form.Field>
-          <Form.Button>Submit</Form.Button>
-        </Form>
+      <div>
+      {
+        post
+        ? <Container>
+            <Menu secondary icon size='small'>
+              <Menu.Item header as='h3'>Post detail</Menu.Item>
+              <Menu.Menu position='right'>
+                <Popup basic trigger={<Menu.Item as={Link} to='/write'>
+                    <Icon name='file'/>
+                  </Menu.Item>} content='New'/>
+                <Popup basic trigger={
+                    <Menu.Item as={Link} to={`/write/${post.id}`}>
+                      <Icon name='file alternate'/>
+                    </Menu.Item>} content='Edit'/>
+                <Popup basic trigger={<Menu.Item as='a'>
+                    <Icon name='trash alternate'/>
+                  </Menu.Item>} content='Delete'/>
+                <Popup basic trigger={<Menu.Item as='a'>
+                    <Icon name='thumbs up' onClick={() => this.ratePost(post.id, 'upVote')}/>
+                  </Menu.Item>} content='Up vote'/>
+                <Popup basic trigger={<Menu.Item as='a'>
+                    <Icon name='thumbs down' onClick={() => this.ratePost(post.id, 'downVote')}/>
+                  </Menu.Item>} content='Down vote'/>
+              </Menu.Menu>
+            </Menu>
+            <Segment vertical>
+              <Grid textAlign='center'>
+                <Grid.Row>
+                  <Grid.Column>
+                    <Header as='h3' color='teal'>{post.title}</Header>
+                  </Grid.Column>
+                </Grid.Row>
 
-        <CommentList id={id}/>
-      </Container>
+                <Grid.Row>
+                  <Grid.Column textAlign='left' width={4}>
+                    <p>{post.body}</p>
+                  </Grid.Column>
+                </Grid.Row>
+
+                <Grid.Row>
+                  <Grid.Column>
+                    <Label.Group circular>
+                      <CustomLabel content={post.author} icon='user'/>
+                      <CustomLabel content={formatDate(post.timestamp)} icon='calendar alternate outline'/>
+                      <CustomLabel content={post.category} icon='archive'/>
+                      <Thermometer score={post.voteScore}/>
+                    </Label.Group>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              <CommentList
+                id={post.id}
+                saveComment={this.saveComment}
+                rateComment={this.rateComment}
+                deleteComment={this.deleteComment}/>
+            </Segment>
+          </Container>
+        : <p>Post not found</p>
+        }
+      </div>
     );
   }
 }
 
-const mapStateToProps = ({comments, categories, posts}, props) => {
-  console.log('DETAIL VIEW state', {posts});
-  console.log('DETAIL VIEW props', {props});
+const mapStateToProps = ({comments, posts}, props) => {
   const {postId} = props.match.params;
-  const action = postId ? 'Edit post' : 'New post';
 
   // Get post by id from list of posts in store
   const post = Object.values(posts)
     .filter((post) => post.id === postId);
 
-  // Remove category 'all' and create list of items for Select component
-  const categoriesValues = Object.values(categories)
-    .filter((category) => category.name !== 'all')
-    .map((category) => (
-      {
-        key: category.name,
-        value: category.name,
-        text: category.name.toUpperCase()
-      }
-    ));
-
   return {
-    action,
     comments: Object.values(comments),
     post: post.length > 0 ? post[0] : null,
-    categories: categoriesValues
   };
 }
 
-export default connect(mapStateToProps)(PostDetailView);
+export default withRouter(connect(mapStateToProps)(PostDetailView));

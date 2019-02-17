@@ -1,18 +1,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Card, Grid, Feed, Form, Label, Icon, Segment} from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import {Button, Comment, Form, Grid, Header, Icon, Label, Segment} from 'semantic-ui-react';
 
 import Thermometer from './Thermometer';
-import {formatDate} from '../utils/format';
-
-import {handleSaveComment, handleGetPostComments} from '../actions/comments';
+import {friendlyDate} from '../utils/format';
 
 class CommentList extends React.Component {
   state = {
     author: '',
     body: '',
     authorError: false,
-    bodyError: false
+    bodyError: false,
+    saving: false
   };
 
   handleChange = (e, {name, value}) => {
@@ -21,7 +21,10 @@ class CommentList extends React.Component {
     });
   }
 
-  submitComment = () => {
+  submitComment = (event) => {
+    event.preventDefault();
+    if (this.state.saving === true) return;
+
     const {author, body} = this.state;
     author.trim();
     body.trim();
@@ -40,107 +43,129 @@ class CommentList extends React.Component {
         author: author,
         body: body
       }
-      this.props.dispatch(handleSaveComment(comment));
-    }
-  }
 
-  componentDidMount() {
-    const {id, comments, dispatch} = this.props;
-    // Check if post comments are already in store...
-    console.log('COMMENT LIST did mount >', id, '<');
-    if (comments.length === 0 && id !== '') {
-      // ...if not, dispatch a request to API
-      dispatch(handleGetPostComments(id));
+      // Start saving
+      this.setState({
+        saving: true
+      }, () => {
+        this.props.saveComment(comment);
+
+        // Finish saving and clear state
+        this.setState({
+          author: '',
+          body: '',
+          authorError: false,
+          bodyError: false,
+          saving: false
+        });
+      });
     }
   }
 
   render() {
     const {authorError, bodyError} = this.state;
+    const {comments, rateComment, deleteComment} = this.props;
 
     return (
-      <Segment textAlign='center' vertical>
       <Grid centered>
-        <Grid.Column width={10}>
-        <Card fluid>
-          <Card.Content>
-            <Card.Header>
-              Comments
-            </Card.Header>
-          </Card.Content>
-          <Card.Content>
-            <Form onSubmit={this.submitComment}>
-              <Form.TextArea
-                name='body'
-                label='Comment'
-                placeholder='Comment this post'
-                maxLength={100}
-                value={this.state.body}
-                onChange={this.handleChange}
-                rows={2}
-                autoHeight/>
-                {
-                  bodyError === true && (
-                    <Label pointing basic color='red'>Please write a comment</Label>
-                  )
-                }
-              <Form.Input
-                name='author'
-                label='Author'
-                placeholder='Let us know who you are'
-                value={this.state.author}
-                onChange={this.handleChange}
-                maxLength={20}/>
-                {
-                  authorError === true && (
-                    <Label pointing basic color='red'>Please tell us your user name</Label>
-                  )
-                }
-              <Form.Button>Add comment</Form.Button>
-            </Form>
-          </Card.Content>
-          <Card.Content>
-            <Feed>
+        <Grid.Row>
+          <Grid.Column width={8}>
+            <Comment.Group minimal>
+              <Header as='h3' dividing>Comments</Header>
               {
-                this.props.comments.length > 0
-                ? this.props.comments.map((comment) => (
-                    <Feed.Event key={comment.id}>
-                      <Feed.Label>
-                        <Icon name='user'/>
-                      </Feed.Label>
-                      <Feed.Content>
-                        <Feed.Summary>
-                          <Feed.User>{comment.author}</Feed.User>
-                          <Feed.Date>{formatDate(comment.timestamp)}</Feed.Date>
-                        <Feed.Extra text>
-                          {comment.body}
-                        </Feed.Extra>
-                        </Feed.Summary>
-                        <Feed.Meta>
-                          <Feed.Like>
-                            <Thermometer score={comment.voteScore} />
-                          </Feed.Like>
-                        </Feed.Meta>
-                      </Feed.Content>
-                    </Feed.Event>
+                comments.length > 0 ? comments.map((comment) => (
+                  <Comment key={comment.id}>
+                    <Comment.Content>
+                      <Comment.Author as='a'>{comment.author}</Comment.Author>
+                      <Comment.Metadata>{friendlyDate(comment.timestamp)}</Comment.Metadata>
+                      <Comment.Text>{comment.body}</Comment.Text>
+                      <Comment.Actions>
+                        <Comment.Action>
+                          <Thermometer score={comment.voteScore}/>
+                        </Comment.Action>
+                        <Comment.Action>
+                          <Icon
+                            name='thumbs up'
+                            onClick={() => rateComment(comment.id, 'upVote')}/>
+                        </Comment.Action>
+                        <Comment.Action>
+                          <Icon
+                            name='thumbs down'
+                            onClick={() => rateComment(comment.id, 'downVote')}/>
+                        </Comment.Action>
+                        <Comment.Action>
+                          <Icon
+                            name='trash alternate'
+                            onClick={() => deleteComment(comment.id)}/>
+                        </Comment.Action>
+                      </Comment.Actions>
+                    </Comment.Content>
+                  </Comment>
                 ))
-                  : <Feed.Event>
-                      <Feed.Summary>Be the first to comment!</Feed.Summary>
-                    </Feed.Event>
+                : <Comment>
+                    <Comment.Text>Be the first to comment!</Comment.Text>
+                  </Comment>
               }
-            </Feed>
-          </Card.Content>
-        </Card>
-        </Grid.Column>
+              <Segment inverted color='teal'>
+                <Form onSubmit={this.submitComment} reply inverted>
+                  <Form.Input
+                    name='body'
+                    label='Comment'
+                    placeholder='Comment this post'
+                    maxLength={60}
+                    value={this.state.body}
+                    onChange={this.handleChange}
+                    error={bodyError === true}/>
+                  {
+                    bodyError === true && (
+                      <Label pointing basic color='red'>Please write a comment</Label>
+                    )
+                  }
+                  <Form.Input
+                    name='author'
+                    label='Author'
+                    placeholder='Let us know who you are'
+                    value={this.state.author}
+                    onChange={this.handleChange}
+                    maxLength={20}
+                    error={authorError === true}/>
+                  {
+                    authorError === true && (
+                      <Label pointing basic color='red'>Please tell us your user name</Label>
+                    )
+                  }
+                  <Button
+                    icon='write'
+                    color='orange'
+                    labelPosition='left'
+                    size='mini'
+                    loading={this.state.saving === true}
+                    content='Add comment'/>
+                </Form>
+              </Segment>
+            </Comment.Group>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
-      </Segment>
     );
   }
 }
 
-const mapStateToProps = ({comments}, {id}) => {
+CommentList.propTypes = {
+  id: PropTypes.string.isRequired,
+  saveComment: PropTypes.func.isRequired,
+  rateComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired
+}
+
+const mapStateToProps = ({comments}, {id, saveComment, rateComment, deleteComment}) => {
   return {
     id,
-    comments: Object.values(comments).filter((comment) => comment.parentId === id)
+    saveComment,
+    rateComment,
+    deleteComment,
+    comments: Object.values(comments)
+      .filter((comment) => comment.parentId === id && comment.deleted === false)
   }
 };
 

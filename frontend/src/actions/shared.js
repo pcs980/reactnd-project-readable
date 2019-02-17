@@ -3,16 +3,9 @@ import {getInitialData} from '../utils/api';
 
 import {storePosts} from './posts';
 import {storeCategories} from './categories';
+import {handleGetPostComments} from './comments';
 
-export const CHANGE_CATEGORY = 'CHANGE_CATEGORY';
 export const SORT_POSTS = 'SORT_POSTS';
-
-export const changeCategory = (activeMenu) => (
-  {
-    type: CHANGE_CATEGORY,
-    activeMenu
-  }
-);
 
 export const sortPosts = (sortBy) => (
   {
@@ -25,16 +18,37 @@ export const handleInitialData = () => (dispatch) => {
   dispatch(showLoading());
   return getInitialData()
     .then((data) => {
+      // Receive posts
       const posts = data[1].data;
 
-      // Add category all to show all posts
-      let categories = [{
-        name: 'all',
-        path: ''
-      }];
+      // Then get comments of each post
+      posts.map((post) => {
+        if (post.commentCount > 0) {
+          dispatch(handleGetPostComments(post.id));
+        }
+        return post;
+      });
 
-      // Then add each category received
-      categories = categories.concat(data[0].data.categories);
+      // Receive categories
+      let categories = data[0].data.categories;
+
+      // Add property count with the count of posts
+      categories = categories.map((category) => {
+        return {
+          ...category,
+          count: posts.reduce((count, post) => {
+            return count + (post.category === category.name ? 1 : 0);
+          }, 0)
+        }
+      });
+
+      // Finally add category all to show all posts
+      categories = [
+        {
+          name: 'all',
+          path: '',
+          count: posts.length
+        }, ...categories];
 
       // Store all categories and posts
       dispatch(storeCategories(categories));
@@ -42,9 +56,6 @@ export const handleInitialData = () => (dispatch) => {
 
       // Set timestamp as default sort field
       dispatch(sortPosts('timestamp'));
-
-      // Assume the first category (all) as active
-      dispatch(changeCategory(categories[0].name));
 
       dispatch(hideLoading());
     });

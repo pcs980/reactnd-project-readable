@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Label} from 'semantic-ui-react';
+import {Icon, Label, Popup} from 'semantic-ui-react';
 
 const Thermometer = (props) => {
   // Define thermometer color and scale based on received score
@@ -24,10 +24,15 @@ const Thermometer = (props) => {
   }
 
   return (
-    <Label basic image>
-      <Icon name={`thermometer ${scale}`} size='large' color={color}/>
-      {props.score}
-    </Label>
+    <Popup
+      trigger={
+        <Label basic image color='grey'>
+          <Icon name={`thermometer ${scale}`} color={color}/>
+          {props.score}º
+        </Label>
+      }
+      on='click'
+      content='Score'/>
   );
 }
 

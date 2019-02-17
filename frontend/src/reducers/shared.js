@@ -1,12 +1,7 @@
-import {CHANGE_CATEGORY, SORT_POSTS} from '../actions/shared';
+import {SORT_POSTS} from '../actions/shared';
 
 const shared = (state = {}, action) => {
   switch (action.type) {
-    case CHANGE_CATEGORY:
-      return {
-        ...state,
-        activeMenu: action.activeMenu
-      }
     case SORT_POSTS:
       /*
       Order logic (ascending or descending)
