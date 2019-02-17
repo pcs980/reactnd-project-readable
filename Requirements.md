@@ -24,6 +24,21 @@ Há três tipos de objetos armazenados no servidor:
 
 O servidor suporta um número pequeno e fixo de categorias que os usuários podem postar baseando-se. As categories são objetos simples contendo um nome um um caminho de URL (normalmente a mesma string). O servidor não possui métodos para criar/modificar/deletar essas categorias. Se você deseja adicionar categorias para o seu app, simplesmente adicione o objeto desejado à Array em categories.js no servidor fornecido.
 
+##### Example of comment
+
+```json
+{
+  author: "thingtwo"
+  ​​​body: "Hi there! I am a COMMENT."
+  ​​​deleted: false
+  ​​​id: "894tuq4ut84ut8v4t8wun89g"
+  ​​​parentDeleted: false
+  ​​​parentId: "8xf0y6ziyjabvozdd253nd"
+  ​​​timestamp: 1468166872634
+  ​​​voteScore: 6
+}
+```
+
 ### Posts
 
 As postagem são os blocos de construção de seu aplicativo. Elas incluem:
@@ -38,6 +53,22 @@ As postagem são os blocos de construção de seu aplicativo. Elas incluem:
 | category  | String  | Deve ser uma das categorias fornecidas pelo servidor |
 | voteScore | Integer | Votos líquidos que a postagem recebeu (default: 1) |
 | deleted   | Boolean | Marcado se o post foi 'deletado' (sem acesso no front end), (default: false) |
+
+##### Example of post
+
+```json
+{
+  author: "thingtwo"
+  ​​​body: "Everyone says so after all."
+  ​​​category: "react"
+  ​​​commentCount: 2
+  ​​​deleted: false
+  id: "8xf0y6ziyjabvozdd253nd"
+  timestamp: 1467166872634
+  title: "Udacity is the best place to learn React"
+  ​​voteScore: 6
+}
+```
 
 ### Comments
 
@@ -56,6 +87,15 @@ Os comentários são anexados às postagens mães. Eles incluem:
 
 > Este aplicativo é anônimo, sem autenticação ou autorização. Não há nenhum objeto user, e comentários e postagens aceitam qualquer nome de usuário/nome para criação e edição.
 > O servidor é muito leve. Ele executa zero validações de dados para impor os tipos de dados acima. Certifique-se de que você está usando os tipos corretos quando enviar requisições ao servidor.
+
+##### Example of category
+
+```json
+{
+  name: "react"
+  ​​​path: "react"
+}
+```
 
 ## Views
 
