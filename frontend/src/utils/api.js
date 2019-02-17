@@ -1,5 +1,9 @@
 import axios from '../utils/axios';
 
+const generateUID = () => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
+
 /**
  * Get Initial Data
  * @returns
@@ -11,16 +15,18 @@ export const getInitialData = () => {
   ]);
 }
 
-export const postPost = (post) => {
-  return axios.post('/posts', {post});
+export const savePost = (post) => {
+  post.id = generateUID();
+  post.timestamp = Date.now();
+  return axios.post('/posts', post);
 };
 
 export const deletePost = (id) => {
-  return axios.delete('/posts/:id', id);
+  return axios.delete(`/posts/${id}`);
 };
 
 export const getPost = (id) => {
-  return axios.get('/posts/:id', id);
+  return axios.get(`/posts/${id}`);
 };
 
 export const getPosts = () => {
@@ -28,13 +34,15 @@ export const getPosts = () => {
 };
 
 export const getPostComments = (id) => {
-  return axios.get('/posts/:id/comments', id);
+  return axios.get(`/posts/${id}/comments`);
 };
 
 export const getCategories = () => {
   return axios.get('/categories');
 }
 
-export const getComment = (id) => {
-  return axios.get('/comments/:id', id);
+export const saveComment = (comment) => {
+  comment.id = generateUID();
+  comment.timestamp = Date.now();
+  return axios.post('/comments/', comment);
 }

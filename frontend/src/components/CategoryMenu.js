@@ -1,34 +1,35 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link, withRouter} from 'react-router-dom';
 import {Menu} from 'semantic-ui-react';
 
 class CategoryMenu extends React.Component {
 
   render() {
-    const {categories, shared, menuClick} = this.props;
+    const {categories, selectedCategory} = this.props;
 
     return (
       <Menu vertical tabular fluid>
-        <Menu.Item header>Categories:</Menu.Item>
-        {categories.map((category) => (
-          <Menu.Item
-            key={category.name}
-            active={category.name === shared.activeMenu}
-            onClick={() => menuClick(category.name)}>
-            {category.name.toUpperCase()}
-          </Menu.Item>
-        ))}
+        {
+          categories.map((category) => (
+            <Menu.Item as={Link}
+              to={`/${category.path}`}
+              key={category.name}
+              active={category.name === selectedCategory}>
+              {category.name.toUpperCase()}
+            </Menu.Item>
+          ))
+        }
       </Menu>
     );
   }
 };
 
-const mapStateToProps = ({categories, shared}, {menuClick}) => {
+const mapStateToProps = ({categories}, {category}) => {
   return {
-    menuClick,
-    shared,
+    selectedCategory: category,
     categories: Object.values(categories),
   };
 };
 
-export default connect(mapStateToProps)(CategoryMenu);
+export default withRouter(connect(mapStateToProps)(CategoryMenu));
