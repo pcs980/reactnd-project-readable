@@ -1,8 +1,8 @@
 import axios from '../utils/axios';
 
 const generateUID = () => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-}
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
 
 /**
  * Get Initial Data
@@ -13,7 +13,7 @@ export const getInitialData = () => {
     getCategories(),
     getPosts(),
   ]);
-}
+};
 
 export const savePost = (post) => {
   post.id = generateUID();

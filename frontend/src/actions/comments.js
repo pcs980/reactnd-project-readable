@@ -73,7 +73,7 @@ const rateComment = (id, option) => (
 
 export const handleRateComment = (id, option) => (dispatch) => {
   return updateRateComment(id, option)
-    .then((data) => {
+    .then(() => {
       dispatch(rateComment(id, option));
     })
     .catch((error) => {
@@ -97,4 +97,4 @@ export const handleDeleteComment = (id) => (dispatch) => {
     .catch((error) => {
       console.warn('Error while deleting comment', error);
     });
-}
+};

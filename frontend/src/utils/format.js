@@ -17,4 +17,4 @@ export const friendlyDate = (timestamp) => {
 
   const days = date.diff(today, 'days');
   return moment.duration(days, 'days').humanize(true);
-}
+};

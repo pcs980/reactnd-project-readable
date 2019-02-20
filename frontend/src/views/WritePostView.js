@@ -1,6 +1,7 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 import {Button, Container, Form, Grid, Icon, Label, Menu, Segment} from 'semantic-ui-react';
 
 import {handleSavePost} from '../actions/posts';
@@ -55,7 +56,7 @@ class WritePostView extends React.Component {
         body: body,
         category: category.toLowerCase(),
         title: title
-      }
+      };
       // Start saving
       this.setState({
         saving: true
@@ -70,7 +71,7 @@ class WritePostView extends React.Component {
   };
 
   goBack = () => {
-    this.props.history.goBack()
+    this.props.history.goBack();
   };
 
   // If received post form props, store it in component's state
@@ -109,84 +110,84 @@ class WritePostView extends React.Component {
           <Grid columns={2} textAlign='center'>
             <Grid.Row>
               <Grid.Column textAlign='left'>
-              <Form onSubmit={this.submitPost} inverted>
-                <Form.Field>
-                  {
-                    titleError === true && (
-                      <Label pointing='below' basic color='red'>Please enter a title</Label>
-                    )
-                  }
-                  <Form.Input
-                    name='title'
-                    label='Title'
-                    placeholder='Your flashy post title'
-                    value={title}
-                    maxLength={40}
-                    onChange={this.handleChange}
-                    error={titleError === true}/>
-                </Form.Field>
-                <Form.Field>
-                  {
-                    categoryError === true && (
-                      <Label pointing='below' basic color='red'>Please select a category</Label>
-                    )
-                  }
-                  <Form.Select
-                    name='category'
-                    label='Category'
-                    placeholder='Select a category'
-                    value={category}
-                    options={this.props.categories}
-                    onChange={this.handleChange}
-                    error={categoryError === true}/>
-                </Form.Field>
-                <Form.Field>
-                  {
-                    bodyError === true && (
-                      <Label pointing='below' basic color='red'>Please write a post</Label>
-                    )
-                  }
-                  <Form.TextArea
-                    name='body'
-                    label='Post'
-                    placeholder='Open your heart and write your post ;)'
-                    value={body}
-                    onChange={this.handleChange}
-                    maxLength={200}
-                    rows={2}
-                    autoHeight
-                    error={bodyError === true}/>
-                </Form.Field>
-                <Form.Field>
-                  {
-                    authorError === true && (
-                      <Label pointing='below' basic color='red'>Please tell us your user name</Label>
-                    )
-                  }
-                  <Form.Input
-                    name='author'
-                    label='Author'
-                    placeholder='Let us know who you are'
-                    value={author}
-                    onChange={this.handleChange}
-                    maxLength={20}
-                    error={authorError === true}/>
-                </Form.Field>
-                <Button
-                  icon='arrow left'
-                  color='grey'
-                  labelPosition='left'
-                  size='mini'
-                  content='Cancel'
-                  onClick={this.goBack}/>
-                <Button
-                  icon='write'
-                  color='orange'
-                  labelPosition='left'
-                  size='mini'
-                  loading={this.state.saving === true}
-                  content='Save'/>
-              </Form>
+                <Form onSubmit={this.submitPost} inverted>
+                  <Form.Field>
+                    {
+                      titleError === true && (
+                        <Label pointing='below' basic color='red'>Please enter a title</Label>
+                      )
+                    }
+                    <Form.Input
+                      name='title'
+                      label='Title'
+                      placeholder='Your flashy post title'
+                      value={title}
+                      maxLength={40}
+                      onChange={this.handleChange}
+                      error={titleError === true}/>
+                  </Form.Field>
+                  <Form.Field>
+                    {
+                      categoryError === true && (
+                        <Label pointing='below' basic color='red'>Please select a category</Label>
+                      )
+                    }
+                    <Form.Select
+                      name='category'
+                      label='Category'
+                      placeholder='Select a category'
+                      value={category}
+                      options={this.props.categories}
+                      onChange={this.handleChange}
+                      error={categoryError === true}/>
+                  </Form.Field>
+                  <Form.Field>
+                    {
+                      bodyError === true && (
+                        <Label pointing='below' basic color='red'>Please write a post</Label>
+                      )
+                    }
+                    <Form.TextArea
+                      name='body'
+                      label='Post'
+                      placeholder='Open your heart and write your post ;)'
+                      value={body}
+                      onChange={this.handleChange}
+                      maxLength={200}
+                      rows={2}
+                      autoHeight
+                      error={bodyError === true}/>
+                  </Form.Field>
+                  <Form.Field>
+                    {
+                      authorError === true && (
+                        <Label pointing='below' basic color='red'>Please tell us your user name</Label>
+                      )
+                    }
+                    <Form.Input
+                      name='author'
+                      label='Author'
+                      placeholder='Let us know who you are'
+                      value={author}
+                      onChange={this.handleChange}
+                      maxLength={20}
+                      error={authorError === true}/>
+                  </Form.Field>
+                  <Button
+                    icon='arrow left'
+                    color='grey'
+                    labelPosition='left'
+                    size='mini'
+                    content='Cancel'
+                    onClick={this.goBack}/>
+                  <Button
+                    icon='write'
+                    color='orange'
+                    labelPosition='left'
+                    size='mini'
+                    loading={this.state.saving === true}
+                    content='Save'/>
+                </Form>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -195,6 +196,14 @@ class WritePostView extends React.Component {
     );
   }
 }
+
+WritePostView.propTypes = {
+  action: PropTypes.string.isRequired,
+  post: PropTypes.object,
+  categories: PropTypes.array,
+  history: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
 
 const mapStateToProps = ({categories, posts}, props) => {
   const {postId} = props.match.params;
@@ -220,6 +229,6 @@ const mapStateToProps = ({categories, posts}, props) => {
     post: post.length > 0 ? post[0] : null,
     categories: categoriesValues
   };
-}
+};
 
 export default withRouter(connect(mapStateToProps)(WritePostView));

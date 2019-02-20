@@ -76,7 +76,7 @@ const ratePost = (id, option) => (
 
 export const handleRatePost = (id, option) => (dispatch) => {
   return updateRatePost(id, option)
-    .then((data) => {
+    .then(() => {
       dispatch(ratePost(id, option));
     })
     .catch((error) => {

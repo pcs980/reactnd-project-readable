@@ -7,42 +7,41 @@ import {ADD_COMMENT,
 const comments = (state = {}, action) => {
   const comments = Object.values(state);
   switch (action.type) {
-    case ADD_COMMENT:
-      return {
-        ...comments.concat(action.comment)
-      }
-    case GET_POST_COMMENTS:
-      return {
-        ...state,
-        ...action.comments
-      };
-    case DELETE_COMMENT:
-      return {
-        ...comments.map((comment) => {
-          if (comment.id === action.id) {
-            comment.deleted = true
-          }
-          return comment;
-        })
-      }
-    case RATE_COMMENT:
-      return {
-        ...comments.map((comment) => {
-          if (comment.id === action.id) {
-            comment.voteScore += action.option === 'upVote' ? 1 : -1
-          }
-          return comment;
-        })
-      }
-    case UPDATE_COMMENT:
-      const filter = comments
+  case ADD_COMMENT:
+    return {
+      ...comments.concat(action.comment)
+    };
+  case GET_POST_COMMENTS:
+    return {
+      ...state,
+      ...action.comments
+    };
+  case DELETE_COMMENT:
+    return {
+      ...comments.map((comment) => {
+        if (comment.id === action.id) {
+          comment.deleted = true;
+        }
+        return comment;
+      })
+    };
+  case RATE_COMMENT:
+    return {
+      ...comments.map((comment) => {
+        if (comment.id === action.id) {
+          comment.voteScore += action.option === 'upVote' ? 1 : -1;
+        }
+        return comment;
+      })
+    };
+  case UPDATE_COMMENT:
+    return {
+      ...comments
         .filter((comment) => comment.id !== action.comment.id)
-        .concat([action.comment]);
-      return {
-        ...filter
-      };
-    default:
-      return state;
+        .concat([action.comment])
+    };
+  default:
+    return state;
   }
 };
 

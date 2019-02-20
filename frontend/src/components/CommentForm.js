@@ -75,7 +75,7 @@ class CommentForm extends React.Component {
           body: nextProps.comment.body,
           authorError: false,
           bodyError: false,
-        }
+        };
       } else {
         return {
           id: undefined,
@@ -83,7 +83,7 @@ class CommentForm extends React.Component {
           body: '',
           authorError: false,
           bodyError: false,
-        }
+        };
       }
     }
     return null;
@@ -147,11 +147,12 @@ class CommentForm extends React.Component {
 }
 
 CommentForm.propTypes= {
+  history: PropTypes.object.isRequired,
   saveComment: PropTypes.func.isRequired,
   cancelEdition: PropTypes.func.isRequired
-}
+};
 
-const mapStateToProps = ({comments}, {saveComment, cancelEdition, id}) => {
+const mapStateToProps = ({comments}, {saveComment, id}) => {
 
   const comment = Object.values(comments)
     .filter((comment) => comment.id === id);

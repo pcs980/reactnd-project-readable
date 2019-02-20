@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Header, Icon, Segment} from 'semantic-ui-react';
 
@@ -25,5 +26,9 @@ const ResourceNotFoundView = (props) => (
     </Segment.Inline>
   </Segment>
 );
+
+ResourceNotFoundView.propTypes = {
+  history: PropTypes.object.isRequired
+};
 
 export default withRouter(ResourceNotFoundView);

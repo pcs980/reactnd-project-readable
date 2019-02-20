@@ -20,7 +20,7 @@ class CommentList extends React.Component {
   cancelCommentEdit = () => {
     this.setState({
       editCommentId: undefined
-    })
+    });
   }
 
   render() {
@@ -41,7 +41,7 @@ class CommentList extends React.Component {
                     rateComment={rateComment}
                     deleteComment={deleteComment} />
                 ))
-                : <Comment>
+                  : <Comment>
                     <Comment.Text>Be the first to comment!</Comment.Text>
                   </Comment>
               }
@@ -58,8 +58,12 @@ class CommentList extends React.Component {
 }
 
 CommentList.propTypes = {
-  id: PropTypes.string.isRequired
-}
+  id: PropTypes.string.isRequired,
+  saveComment: PropTypes.func.isRequired,
+  rateComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  comments: PropTypes.array.isRequired
+};
 
 const mapStateToProps = ({comments}, {id, saveComment, rateComment, deleteComment}) => {
   return {
@@ -69,7 +73,7 @@ const mapStateToProps = ({comments}, {id, saveComment, rateComment, deleteCommen
     deleteComment,
     comments: Object.values(comments)
       .filter((comment) => comment.parentId === id && comment.deleted === false)
-  }
+  };
 };
 
 export default connect(mapStateToProps)(CommentList);

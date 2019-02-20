@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import {Link, withRouter} from 'react-router-dom';
 import {Icon, Input, Label, Menu} from 'semantic-ui-react';
 
@@ -48,6 +49,11 @@ class CategoryMenu extends React.Component {
       </Menu>
     );
   }
+}
+
+CategoryMenu.propTypes = {
+  categories: PropTypes.array.isRequired,
+  selectedCategory: PropTypes.string
 };
 
 const mapStateToProps = ({categories, shared}, {category}) => {

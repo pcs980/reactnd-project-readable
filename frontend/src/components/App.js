@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import LoadingBar from 'react-redux-loading';
 import {Container} from 'semantic-ui-react';
 
@@ -15,7 +16,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.dispatch(handleInitialData());
-  };
+  }
 
   render() {
     return (
@@ -27,12 +28,12 @@ class App extends Component {
             this.props.loading === true
               ? null
               : <Switch>
-                  <Route path='/' exact component={PostListView}/>
-                  <Route path='/post' exact component={WritePostView}/>
-                  <Route path='/post/:postId' exact component={WritePostView}/>
-                  <Route path='/:category' exact component={PostListView}/>
-                  <Route path='/:category/:postId' exact component={PostDetailView}/>
-                </Switch>
+                <Route path='/' exact component={PostListView}/>
+                <Route path='/post' exact component={WritePostView}/>
+                <Route path='/post/:postId' exact component={WritePostView}/>
+                <Route path='/:category' exact component={PostListView}/>
+                <Route path='/:category/:postId' exact component={PostDetailView}/>
+              </Switch>
           }
         </Container>
       </BrowserRouter>
@@ -40,10 +41,15 @@ class App extends Component {
   }
 }
 
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
+};
+
 const mapStateToProps = ({loadingBar}) => {
   return {
     loading: loadingBar.default === 1,
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(App);

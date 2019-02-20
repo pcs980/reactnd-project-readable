@@ -2,13 +2,13 @@ import {GET_ALL_CATEGORIES} from '../actions/categories';
 
 const categories = (state = {}, action) => {
   switch (action.type) {
-    case GET_ALL_CATEGORIES:
-      return {
-        ...state,
-        ...action.categories
-      }
-    default:
-      return state;
+  case GET_ALL_CATEGORIES:
+    return {
+      ...state,
+      ...action.categories
+    };
+  default:
+    return state;
   }
 };
 

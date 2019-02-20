@@ -14,6 +14,6 @@ const CustomLabel = (props) => (
 CustomLabel.propTypes = {
   icon: PropTypes.string,
   content: PropTypes.any,
-}
+};
 
 export default CustomLabel;

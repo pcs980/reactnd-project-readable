@@ -55,7 +55,7 @@ const mapStateToProps = ({comments}, {comment, editComment, rateComment, deleteC
     rateComment,
     deleteComment,
     comments
-  }
+  };
 };
 
 export default connect(mapStateToProps)(CommentItem);

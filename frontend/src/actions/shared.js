@@ -39,7 +39,7 @@ export const handleInitialData = () => (dispatch) => {
           count: posts.reduce((count, post) => {
             return count + (post.category === category.name ? 1 : 0);
           }, 0)
-        }
+        };
       });
 
       // Finally add category all to show all posts

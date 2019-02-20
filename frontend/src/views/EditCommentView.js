@@ -7,10 +7,10 @@ const EditCommentView = ({comment}) => {
   return (
     <CommentForm comment={comment}/>
   );
-}
+};
 
 EditCommentView.propTypes = {
   comment: PropTypes.object.isRequired
-}
+};
 
 export default EditCommentView;

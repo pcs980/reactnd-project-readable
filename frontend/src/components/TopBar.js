@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Container, Header, Image, Segment} from 'semantic-ui-react';
 
-const TopBar = (props) => (
+const TopBar = () => (
   <Segment inverted color='teal'>
     <Container as={Link} to='/'>
       <Header as='h2' inverted color='black'>

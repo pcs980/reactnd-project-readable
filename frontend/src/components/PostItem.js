@@ -44,6 +44,6 @@ const PostItem = (props) => {
 
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
-}
+};
 
 export default PostItem;

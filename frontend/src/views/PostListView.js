@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {Grid} from 'semantic-ui-react';
 
@@ -30,14 +31,18 @@ class PostListView extends React.Component {
   }
 }
 
+PostListView.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  selectedCategory: PropTypes.string.isRequired
+};
+
 const mapStateToProps = (state, props) => {
   // Receive category in URL params or assume 'all'
   const category = props.match.params.category || 'all';
 
   return {
-    ...state,
     selectedCategory: category
   };
-}
+};
 
 export default withRouter(connect(mapStateToProps)(PostListView));
