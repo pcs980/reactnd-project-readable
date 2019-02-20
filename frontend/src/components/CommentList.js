@@ -29,7 +29,7 @@ class CommentList extends React.Component {
     return (
       <Grid centered>
         <Grid.Row>
-          <Grid.Column width={8}>
+          <Grid.Column width={10}>
             <Comment.Group minimal>
               <Header as='h3' dividing>Comments</Header>
               {

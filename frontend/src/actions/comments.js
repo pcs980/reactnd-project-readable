@@ -1,9 +1,11 @@
+import {incrementComment, decrementComment} from './posts';
 import {
   deleteComment,
   getPostComments,
   putComment,
   saveComment,
   updateRateComment} from '../utils/api';
+
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
@@ -26,6 +28,7 @@ const updateComment = (comment) => (
 );
 
 export const handleSaveComment = (comment) => (dispatch) => {
+  // It's a comment edition if there's an id
   if (comment.id) {
     return putComment(comment)
       .then(({data}) => {
@@ -38,6 +41,8 @@ export const handleSaveComment = (comment) => (dispatch) => {
     return saveComment(comment)
       .then(({data}) => {
         dispatch(storeComment(data));
+        // Increment post's comment count
+        dispatch(incrementComment(data.parentId));
       })
       .catch((error) => {
         console.warn('Error while saving comment', error);
@@ -90,9 +95,10 @@ const removeComment = (id) => (
 
 export const handleDeleteComment = (id) => (dispatch) => {
   return deleteComment(id)
-    .then((data) => {
-      console.log('COMMENT DELETED', data);
+    .then(({data}) => {
       dispatch(removeComment(id));
+      // Decrement post's comment count
+      dispatch(decrementComment(data.parentId));
     })
     .catch((error) => {
       console.warn('Error while deleting comment', error);

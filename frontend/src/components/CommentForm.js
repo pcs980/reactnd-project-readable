@@ -6,11 +6,13 @@ import {Button, Form, Label, Segment} from 'semantic-ui-react';
 
 class CommentForm extends React.Component {
   state = {
-    id: '',
+    id: undefined,
     author: '',
     body: '',
     authorError: false,
     bodyError: false,
+    loaded: false,
+    saved: false,
     saving: false,
   };
 
@@ -22,13 +24,13 @@ class CommentForm extends React.Component {
     this.setState({
       [name]: value
     });
-  }
+  };
 
   submitComment = (event) => {
     event.preventDefault();
     if (this.state.saving === true) return;
 
-    const {author, body} = this.state;
+    const {id, author, body} = this.state;
     author.trim();
     body.trim();
 
@@ -43,7 +45,7 @@ class CommentForm extends React.Component {
     } else {
       // Build comment object
       const comment = {
-        id: this.state.id,
+        id: id,
         author: author,
         body: body
       };
@@ -55,52 +57,53 @@ class CommentForm extends React.Component {
           .then(() => {
             // Finish saving and clear state
             this.setState({
-              author: '',
-              body: '',
-              authorError: false,
-              bodyError: false,
+              id: undefined,
+              saved: true,
               saving: false
             });
           });
       });
     }
-  }
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.id !== prevState.id) {
-      if (nextProps.comment) {
-        return {
-          id: nextProps.comment.id,
-          author: nextProps.comment.author,
-          body: nextProps.comment.body,
-          authorError: false,
-          bodyError: false,
-        };
-      } else {
-        return {
-          id: undefined,
-          author: '',
-          body: '',
-          authorError: false,
-          bodyError: false,
-        };
-      }
+    if (prevState.saved === true) {
+      return {
+        id: undefined,
+        author: '',
+        body: '',
+        saved: false,
+        authorError: false,
+        bodyError: false,
+      };
+    } else if ((nextProps.comment && prevState.loaded === false)) {
+      return {
+        id: nextProps.comment.id,
+        author: nextProps.comment.author,
+        body: nextProps.comment.body,
+        authorError: false,
+        bodyError: false,
+        saved: false,
+        loaded: true
+      };
     }
+
     return null;
   }
 
   render() {
-    const {id, authorError, bodyError} = this.state;
+    const {id, body, author, authorError, bodyError, saving} = this.state;
+    const commentSizeLeft = 100 - body.length;
 
     return (
       <Segment inverted color='teal'>
         <Form reply inverted>
-          <Form.Input
+          <Form.TextArea
             name='body'
-            label='Comment'
+            label={`Comment (${commentSizeLeft} left)`}
             placeholder='Comment this post'
-            maxLength={60}
-            value={this.state.body}
+            maxLength={100}
+            value={body}
             onChange={this.handleChange}
             error={bodyError === true}/>
           {
@@ -112,7 +115,7 @@ class CommentForm extends React.Component {
             name='author'
             label='Author'
             placeholder='Let us know who you are'
-            value={this.state.author}
+            value={author}
             onChange={this.handleChange}
             maxLength={20}
             error={authorError === true}/>
@@ -137,8 +140,9 @@ class CommentForm extends React.Component {
             color='orange'
             labelPosition='left'
             size='mini'
-            content='Add comment'
-            loading={this.state.saving === true}
+            disabled={saving === true}
+            content='Save comment'
+            loading={saving === true}
             onClick={this.submitComment}/>
         </Form>
       </Segment>

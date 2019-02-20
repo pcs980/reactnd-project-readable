@@ -11,7 +11,7 @@ import ResourceNotFoundView from './ResourceNotFoundView';
 import {formatDate} from '../utils/format';
 
 import {handleDeleteComment, handleRateComment, handleSaveComment} from '../actions/comments';
-import {handleRatePost, incrementComment, decrementComment} from '../actions/posts';
+import {handleRatePost} from '../actions/posts';
 
 class PostDetailView extends React.Component {
 
@@ -21,17 +21,7 @@ class PostDetailView extends React.Component {
 
   saveComment = (comment) => {
     comment.parentId = this.props.post.id;
-    return this.props.dispatch(handleSaveComment(comment))
-      .then(() => {
-        // When the comment doesn't have an id, it means that is new
-        // and the comment count must be increased
-        if (comment.id)
-          this.props.dispatch(incrementComment(this.props.post.id));
-      });
-  };
-
-  updateComment = (comment) => {
-    this.props.dispatch(handleSaveComment(comment));
+    return this.props.dispatch(handleSaveComment(comment));
   };
 
   rateComment = (id, option) => {
@@ -39,8 +29,7 @@ class PostDetailView extends React.Component {
   };
 
   deleteComment = (id) => {
-    this.props.dispatch(handleDeleteComment(id))
-      .then(() => this.props.dispatch(decrementComment(this.props.post.id)));
+    this.props.dispatch(handleDeleteComment(id));
   };
 
   render() {
@@ -118,6 +107,7 @@ class PostDetailView extends React.Component {
                         <CustomLabel content={post.author} icon='user'/>
                         <CustomLabel content={formatDate(post.timestamp)} icon='calendar alternate outline'/>
                         <CustomLabel content={post.category} icon='archive'/>
+                        <CustomLabel content={post.commentCount} icon='comments'/>
                         <Thermometer score={post.voteScore}/>
                       </Label.Group>
                     </Grid.Column>
