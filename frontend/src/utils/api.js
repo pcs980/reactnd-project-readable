@@ -34,11 +34,11 @@ export const getPosts = () => {
 };
 
 export const putPost = (post) => {
-  return axios.put(`/posts/${post.id}`, post)
+  return axios.put(`/posts/${post.id}`, post);
 };
 
 export const updateRatePost = (id, option) => {
-  return axios.post(`/posts/${id}`, {option})
+  return axios.post(`/posts/${id}`, {option});
 };
 
 export const getPostComments = (id) => {
@@ -55,8 +55,12 @@ export const saveComment = (comment) => {
   return axios.post('/comments/', comment);
 };
 
+export const putComment = (comment) => {
+  return axios.put(`/comments/${comment.id}`, comment);
+};
+
 export const updateRateComment = (id, option) => {
-  return axios.post(`/comments/${id}`, {option})
+  return axios.post(`/comments/${id}`, {option});
 };
 
 export const deleteComment = (id) => {

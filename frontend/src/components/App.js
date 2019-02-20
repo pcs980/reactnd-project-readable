@@ -6,9 +6,9 @@ import {Container} from 'semantic-ui-react';
 
 import {handleInitialData} from '../actions/shared';
 
-import TopBar from './TopBar';
-import PostsView from '../views/PostsView';
+import PostListView from '../views/PostListView';
 import PostDetailView from '../views/PostDetailView';
+import TopBar from './TopBar';
 import WritePostView from '../views/WritePostView';
 
 class App extends Component {
@@ -27,10 +27,10 @@ class App extends Component {
             this.props.loading === true
               ? null
               : <Switch>
-                  <Route path='/' exact component={PostsView}/>
-                  <Route path='/write' exact component={WritePostView}/>
-                  <Route path='/write/:postId' exact component={WritePostView}/>
-                  <Route path='/:category' exact component={PostsView}/>
+                  <Route path='/' exact component={PostListView}/>
+                  <Route path='/post' exact component={WritePostView}/>
+                  <Route path='/post/:postId' exact component={WritePostView}/>
+                  <Route path='/:category' exact component={PostListView}/>
                   <Route path='/:category/:postId' exact component={PostDetailView}/>
                 </Switch>
           }
@@ -40,9 +40,9 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({categories}) => {
+const mapStateToProps = ({loadingBar}) => {
   return {
-    loading: categories === []
+    loading: loadingBar.default === 1,
   }
 }
 

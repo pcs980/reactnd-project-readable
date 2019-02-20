@@ -22,9 +22,9 @@ const sortParameters = [
 ];
 
 // TODO: add 'New post' button and search field
-const ListControl = (props) => (
-  <Menu fluid borderless secondary size='small' icon>
-    <Menu.Item as={Link} to='/write'>
+const PostListControl = (props) => (
+  <Menu fluid secondary pointing size='small' icon>
+    <Menu.Item as={Link} to='/post'>
       <Icon name='file'/> New Post
     </Menu.Item>
 
@@ -55,4 +55,4 @@ const mapStateToProps = ({shared}) => {
   };
 }
 
-export default connect(mapStateToProps)(ListControl);
+export default connect(mapStateToProps)(PostListControl);

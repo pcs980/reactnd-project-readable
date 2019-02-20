@@ -3,13 +3,13 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Grid} from 'semantic-ui-react';
 
-import ListControl from '../components/ListControl';
+import PostListControl from '../components/PostListControl';
 import CategoryMenu from '../components/CategoryMenu';
 import PostList from '../components/PostList';
 
 import {sortPosts} from '../actions/shared';
 
-class PostsView extends React.Component {
+class PostListView extends React.Component {
 
   handleSortPosts = (sortBy) => {
     this.props.dispatch(sortPosts(sortBy));
@@ -22,7 +22,7 @@ class PostsView extends React.Component {
           <CategoryMenu category={this.props.selectedCategory}/>
         </Grid.Column>
         <Grid.Column width={12}>
-          <ListControl sortClick={this.handleSortPosts}/>
+          <PostListControl sortClick={this.handleSortPosts}/>
           <PostList category={this.props.selectedCategory}/>
         </Grid.Column>
       </Grid>
@@ -40,4 +40,4 @@ const mapStateToProps = (state, props) => {
   };
 }
 
-export default withRouter(connect(mapStateToProps)(PostsView));
+export default withRouter(connect(mapStateToProps)(PostListView));

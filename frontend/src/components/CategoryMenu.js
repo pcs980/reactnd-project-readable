@@ -1,18 +1,27 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Icon, Label, Menu} from 'semantic-ui-react';
+import {Icon, Input, Label, Menu} from 'semantic-ui-react';
 
 class CategoryMenu extends React.Component {
+  state = {
+    search: ''
+  };
+
+  handleChange = (e, {value}) => {
+    this.setState({
+      search: value
+    });
+  };
 
   render() {
     const {categories, selectedCategory} = this.props;
 
     return (
-      <Menu vertical tabular fluid>
-        <Menu.Header as='h5'>
+      <Menu vertical fluid tabular color='orange'>
+        <Menu.Item header as='h5'>
           <Icon name='archive'/> Categories
-        </Menu.Header>
+        </Menu.Item>
         {
           categories.map((category) => (
             <Menu.Item as={Link}
@@ -28,13 +37,22 @@ class CategoryMenu extends React.Component {
             </Menu.Item>
           ))
         }
+        <Menu.Item>
+          <Input
+            name='search'
+            placeholder='Search posts'
+            value={this.state.search}
+            onChange={this.handleChange}
+            icon='search'/>
+        </Menu.Item>
       </Menu>
     );
   }
 };
 
-const mapStateToProps = ({categories}, {category}) => {
+const mapStateToProps = ({categories, shared}, {category}) => {
   return {
+    shared,
     selectedCategory: category,
     categories: Object.values(categories),
   };

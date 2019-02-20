@@ -4,8 +4,9 @@ import {Link, withRouter} from 'react-router-dom';
 import {Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
 
 import CommentList from '../components/CommentList';
-import Thermometer from '../components/Thermometer';
 import CustomLabel from '../components/CustomLabel';
+import Thermometer from '../components/Thermometer';
+import ResourceNotFoundView from './ResourceNotFoundView';
 import {formatDate} from '../utils/format';
 
 import {handleDeleteComment, handleRateComment, handleSaveComment} from '../actions/comments';
@@ -13,13 +14,23 @@ import {handleRatePost, incrementComment, decrementComment} from '../actions/pos
 
 class PostDetailView extends React.Component {
 
-  ratePost= (id, option) => {
+  ratePost = (id, option) => {
     this.props.dispatch(handleRatePost(id, option));
   };
 
   saveComment = (comment) => {
-    this.props.dispatch(handleSaveComment(comment))
-      .then(() => this.props.dispatch(incrementComment(this.props.post.id)));
+    comment.parentId = this.props.post.id;
+    return this.props.dispatch(handleSaveComment(comment))
+      .then(() => {
+        // When the comment doesn't have an id, it means that is new
+        // and the comment count must be increased
+        if (!!comment.id)
+          this.props.dispatch(incrementComment(this.props.post.id));
+      });
+  };
+
+  updateComment = (comment) => {
+    this.props.dispatch(handleSaveComment(comment));
   };
 
   rateComment = (id, option) => {
@@ -32,31 +43,58 @@ class PostDetailView extends React.Component {
   };
 
   render() {
-    const {post} = this.props;
+    const {post, loading} = this.props;
     return (
       <div>
       {
         post
         ? <Container>
-            <Menu secondary icon size='small'>
-              <Menu.Item header as='h3'>Post detail</Menu.Item>
+            <Menu secondary pointing icon size='small'>
+              <Menu.Item header
+                onClick={this.props.history.goBack}>
+                <Icon name='arrow left'/>
+                Post detail
+              </Menu.Item>
               <Menu.Menu position='right'>
-                <Popup basic trigger={<Menu.Item as={Link} to='/write'>
-                    <Icon name='file'/>
-                  </Menu.Item>} content='New'/>
-                <Popup basic trigger={
-                    <Menu.Item as={Link} to={`/write/${post.id}`}>
+                <Popup
+                  basic
+                  content='New'
+                  trigger={
+                    <Menu.Item as={Link}
+                      to='/post'>
+                      <Icon name='file'/>
+                  </Menu.Item>}/>
+                <Popup
+                  basic
+                  content='Edit'
+                  trigger={
+                    <Menu.Item as={Link}
+                      to={`/post/${post.id}`}>
                       <Icon name='file alternate'/>
-                    </Menu.Item>} content='Edit'/>
-                <Popup basic trigger={<Menu.Item as='a'>
-                    <Icon name='trash alternate'/>
-                  </Menu.Item>} content='Delete'/>
-                <Popup basic trigger={<Menu.Item as='a'>
-                    <Icon name='thumbs up' onClick={() => this.ratePost(post.id, 'upVote')}/>
-                  </Menu.Item>} content='Up vote'/>
-                <Popup basic trigger={<Menu.Item as='a'>
-                    <Icon name='thumbs down' onClick={() => this.ratePost(post.id, 'downVote')}/>
-                  </Menu.Item>} content='Down vote'/>
+                    </Menu.Item>}/>
+                <Popup
+                  basic
+                  content='Delete'
+                  trigger={
+                    <Menu.Item as='a'>
+                      <Icon name='trash alternate'/>
+                    </Menu.Item>}/>
+                <Popup
+                  basic
+                  content='Up vote'
+                  trigger={
+                    <Menu.Item as='a'
+                      onClick={() => this.ratePost(post.id, 'upVote')}>
+                      <Icon name='thumbs up'/>
+                    </Menu.Item>}/>
+                <Popup
+                  basic
+                  content='Down vote'
+                  trigger={
+                    <Menu.Item as='a'
+                      onClick={() => this.ratePost(post.id, 'downVote')}>
+                      <Icon name='thumbs down'/>
+                    </Menu.Item>}/>
               </Menu.Menu>
             </Menu>
             <Segment vertical>
@@ -91,14 +129,16 @@ class PostDetailView extends React.Component {
                 deleteComment={this.deleteComment}/>
             </Segment>
           </Container>
-        : <p>Post not found</p>
-        }
+        : loading === true
+          ? <div>Loading</div>
+          : <ResourceNotFoundView />
+      }
       </div>
     );
   }
 }
 
-const mapStateToProps = ({comments, posts}, props) => {
+const mapStateToProps = ({comments, posts, loadingBar}, props) => {
   const {postId} = props.match.params;
 
   // Get post by id from list of posts in store
@@ -107,7 +147,8 @@ const mapStateToProps = ({comments, posts}, props) => {
 
   return {
     comments: Object.values(comments),
-    post: post.length > 0 ? post[0] : null,
+    loading: loadingBar.default === 1,
+    post: post.length > 0 ? post[0] : undefined,
   };
 }
 

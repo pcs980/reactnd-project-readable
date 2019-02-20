@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {Button, Container, Form, Grid, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
+import {Button, Container, Form, Grid, Icon, Label, Menu, Segment} from 'semantic-ui-react';
 
 import {handleSavePost} from '../actions/posts';
 
@@ -27,7 +27,7 @@ class WritePostView extends React.Component {
   handleChange = (e, {name, value}) => {
     this.setState({
       [name]: value
-    }, () => console.log('handled ' + name + ' with ' + value, this.state));
+    });
   };
 
   submitPost = (event) => {
@@ -48,6 +48,7 @@ class WritePostView extends React.Component {
         titleError
       });
     } else {
+      // Build post object
       const post = {
         id: id,
         author: author,
@@ -59,10 +60,11 @@ class WritePostView extends React.Component {
       this.setState({
         saving: true
       }, () => {
-        this.props.dispatch(handleSavePost(post));
-
-        // Finish saving and clear state
-        this.props.history.push(`/${category}/${id}`);
+        this.props.dispatch(handleSavePost(post))
+          .then(() => {
+            // Finish saving and clear state
+            this.props.history.push(`/${category}/${id}`);
+          });
       });
     }
   };
@@ -96,13 +98,12 @@ class WritePostView extends React.Component {
     const {title, author, category, body, authorError, bodyError, categoryError, titleError} = this.state;
     return (
       <Container>
-        <Menu secondary icon>
-          <Menu.Item header as='h3'>{action}</Menu.Item>
-            <Menu.Menu position='right'>
-              <Popup basic trigger={<Menu.Item as='a' onClick={this.props.history.goBack}>
-                  <Icon name='arrow left'/>
-                </Menu.Item>} content='Voltar'/>
-            </Menu.Menu>
+        <Menu secondary pointing icon>
+          <Menu.Item header
+            onClick={this.props.history.goBack}>
+            <Icon name='arrow left'/>
+            {action}
+          </Menu.Item>
         </Menu>
         <Segment vertical inverted color='teal'>
           <Grid columns={2} textAlign='center'>

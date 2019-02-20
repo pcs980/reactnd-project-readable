@@ -1,9 +1,29 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
+import {Button, Header, Icon, Segment} from 'semantic-ui-react';
 
 const ResourceNotFoundView = (props) => (
-  <div>
-  </div>
+  <Segment placeholder size='tiny'>
+    <Header icon>
+      <Icon name='frown outline'/>
+      No post found.
+    </Header>
+    <Segment.Inline>
+      <Button
+        icon='arrow left'
+        color='grey'
+        labelPosition='left'
+        size='mini'
+        content='Back'
+        onClick={props.history.goBack}/>
+      <Button as={Link} to='/post'
+        icon='file'
+        color='orange'
+        labelPosition='left'
+        size='mini'
+        content='Write a Post'/>
+    </Segment.Inline>
+  </Segment>
 );
 
 export default withRouter(ResourceNotFoundView);

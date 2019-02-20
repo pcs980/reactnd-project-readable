@@ -7,13 +7,13 @@ const CustomLabel = (props) => (
     {
       props.icon && (<Icon name={props.icon}/>)
     }
-    {props.content}
+    {props.content && (props.content)}
   </Label>
 );
 
 CustomLabel.propTypes = {
   icon: PropTypes.string,
-  content: PropTypes.string.isRequired
+  content: PropTypes.any,
 }
 
 export default CustomLabel;

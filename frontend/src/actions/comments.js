@@ -1,6 +1,7 @@
 import {
   deleteComment,
   getPostComments,
+  putComment,
   saveComment,
   updateRateComment} from '../utils/api';
 
@@ -8,6 +9,7 @@ export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const GET_POST_COMMENTS = 'GET_POST_COMMENTS';
 export const RATE_COMMENT = 'RATE_COMMENT';
+export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 
 const storeComment = (comment) => (
   {
@@ -16,14 +18,31 @@ const storeComment = (comment) => (
   }
 );
 
-export const handleSaveComment = (info) => (dispatch) => {
-  return saveComment(info)
-    .then(({data}) => {
-      dispatch(storeComment(data));
-    })
-    .catch((error) => {
-      console.warn('Error while saving comment', error);
-    });
+const updateComment = (comment) => (
+  {
+    type: UPDATE_COMMENT,
+    comment
+  }
+);
+
+export const handleSaveComment = (comment) => (dispatch) => {
+  if (comment.id) {
+    return putComment(comment)
+      .then(({data}) => {
+        dispatch(updateComment(data));
+      })
+      .catch((error) => {
+        console.warn('Error while saving comment', error);
+      });
+  } else {
+    return saveComment(comment)
+      .then(({data}) => {
+        dispatch(storeComment(data));
+      })
+      .catch((error) => {
+        console.warn('Error while saving comment', error);
+      });
+  }
 };
 
 const storePostComments = (id, comments) => (

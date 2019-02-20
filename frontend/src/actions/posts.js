@@ -1,4 +1,8 @@
-import {getPosts,savePost, putPost,  updateRatePost} from '../utils/api';
+import {
+  getPosts,
+  putPost,
+  savePost,
+  updateRatePost} from '../utils/api';
 
 export const ADD_POST = 'SAVE_POST';
 export const DELETE_POST = 'DELETE_POST';
@@ -26,18 +30,18 @@ const updatePost = (post) => (
 export const handleSavePost = (post) => (dispatch) => {
   if (post.id) {
     return putPost(post)
-      .then((post) => {
-        console.log('updated post', post);
-        dispatch(updatePost(post));
+      .then(({data}) => {
+        console.log('updated post', data);
+        dispatch(updatePost(data));
       })
       .catch((error) => {
         console.warn('Error while updating post', error);
       });
   } else {
     return savePost(post)
-      .then((post) => {
-        console.log('saved post', post);
-        dispatch(storePost(post));
+      .then(({data}) => {
+        console.log('saved post', data);
+        dispatch(storePost(data));
       })
       .catch((error) => {
         console.warn('Error while saving post', error);

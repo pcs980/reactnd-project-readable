@@ -1,7 +1,8 @@
 import {ADD_COMMENT,
   DELETE_COMMENT,
   GET_POST_COMMENTS,
-  RATE_COMMENT} from '../actions/comments';
+  RATE_COMMENT,
+  UPDATE_COMMENT} from '../actions/comments';
 
 const comments = (state = {}, action) => {
   const comments = Object.values(state);
@@ -33,6 +34,13 @@ const comments = (state = {}, action) => {
           return comment;
         })
       }
+    case UPDATE_COMMENT:
+      const filter = comments
+        .filter((comment) => comment.id !== action.comment.id)
+        .concat([action.comment]);
+      return {
+        ...filter
+      };
     default:
       return state;
   }

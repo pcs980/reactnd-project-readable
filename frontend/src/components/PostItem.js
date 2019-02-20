@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import {Card, Icon, Label, Responsive} from 'semantic-ui-react';
 
 import Thermometer from './Thermometer';
+import CustomLabel from './CustomLabel';
 import {justDate} from '../utils/format';
 
-const PostCard = (props) => {
+const PostItem = (props) => {
   const {id, author, title, commentCount, voteScore, category} = props.post;
 
   return (
@@ -18,26 +19,31 @@ const PostCard = (props) => {
             name='calendar' color='grey' size='small' /> {justDate(props.post.timestamp)}
         </Card.Meta>
       </Card.Content>
-      <Card.Content extra>
+      <Card.Content extra textAlign='center'>
         <Label.Group circular>
-        <Thermometer score={voteScore}/>
-        {
-          commentCount > 0 && (
-            <Responsive as={Label} minWidth={Responsive.onlyTablet.minWidth} basic image color='grey'>
-              <Icon name='comments'/>
-              {commentCount}
-            </Responsive>
-          )
-        }
+          <Thermometer score={voteScore}/>
+          {
+            commentCount > 0 && (
+              <Responsive as={CustomLabel}
+                minWidth={Responsive.onlyTablet.minWidth}
+                content={commentCount}
+                icon='comments'/>
+            )
+          }
+          <Responsive as={CustomLabel}
+            minWidth={Responsive.onlyTablet.minWidth}
+            icon='thumbs up'/>
+          <Responsive as={CustomLabel}
+            minWidth={Responsive.onlyTablet.minWidth}
+            icon='thumbs down'/>
         </Label.Group>
-
       </Card.Content>
     </Card>
   );
 };
 
-PostCard.propTypes = {
+PostItem.propTypes = {
   post: PropTypes.object.isRequired,
 }
 
-export default PostCard;
+export default PostItem;
