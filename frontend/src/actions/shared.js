@@ -32,24 +32,6 @@ export const handleInitialData = () => (dispatch) => {
       // Receive categories
       let categories = data[0].data.categories;
 
-      // Add property count with the count of posts
-      categories = categories.map((category) => {
-        return {
-          ...category,
-          count: posts.reduce((count, post) => {
-            return count + (post.category === category.name ? 1 : 0);
-          }, 0)
-        };
-      });
-
-      // Finally add category all to show all posts
-      categories = [
-        {
-          name: 'all',
-          path: '',
-          count: posts.length
-        }, ...categories];
-
       // Store all categories and posts
       dispatch(storeCategories(categories));
       dispatch(storePosts(posts));

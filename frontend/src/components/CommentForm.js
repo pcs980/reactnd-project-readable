@@ -132,6 +132,7 @@ class CommentForm extends React.Component {
                 labelPosition='left'
                 size='mini'
                 content='Cancel'
+                disabled={saving === true}
                 onClick={this.props.cancelEdition}/>
             )
           }
@@ -140,8 +141,8 @@ class CommentForm extends React.Component {
             color='orange'
             labelPosition='left'
             size='mini'
-            disabled={saving === true}
             content='Save comment'
+            disabled={saving === true}
             loading={saving === true}
             onClick={this.submitComment}/>
         </Form>

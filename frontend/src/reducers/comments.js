@@ -9,7 +9,7 @@ const comments = (state = {}, action) => {
   switch (action.type) {
   case ADD_COMMENT:
     return {
-      ...comments.concat(action.comment)
+      ...comments.concat([action.comment])
     };
   case GET_POST_COMMENTS:
     return {

@@ -8,9 +8,15 @@ import PostListControl from '../components/PostListControl';
 import CategoryMenu from '../components/CategoryMenu';
 import PostList from '../components/PostList';
 
+import {handleRatePost} from '../actions/posts';
 import {sortPosts} from '../actions/shared';
 
 class PostListView extends React.Component {
+
+  ratePost = (id, option) => {
+    console.log(`rating ${option} ${id}`);
+    this.props.dispatch(handleRatePost(id, option));
+  };
 
   handleSortPosts = (sortBy) => {
     this.props.dispatch(sortPosts(sortBy));
@@ -24,7 +30,9 @@ class PostListView extends React.Component {
         </Grid.Column>
         <Grid.Column width={12}>
           <PostListControl sortClick={this.handleSortPosts}/>
-          <PostList category={this.props.selectedCategory}/>
+          <PostList
+            ratePost={this.ratePost}
+            category={this.props.selectedCategory}/>
         </Grid.Column>
       </Grid>
     );

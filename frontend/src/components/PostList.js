@@ -9,7 +9,7 @@ import ResourceNotFoundView from '../views/ResourceNotFoundView';
 class PostList extends React.Component {
 
   render() {
-    const {posts, shared, loading} = this.props;
+    const {posts, shared, loading, ratePost} = this.props;
     const order = shared.order || 'ascending';
 
     return (
@@ -28,7 +28,10 @@ class PostList extends React.Component {
                     return b[shared.sortBy] > a[shared.sortBy];
                   }})
                   .map((post) => (
-                    <PostItem key={post.id} post={post}/>
+                    <PostItem
+                      key={post.id}
+                      ratePost={ratePost}
+                      post={post}/>
                   ))
               }
             </Card.Group>
@@ -42,7 +45,8 @@ PostList.propTypes = {
   shared: PropTypes.object.isRequired,
   category: PropTypes.string.isRequired,
   posts: PropTypes.array,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  ratePost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({posts, shared, loadingBar}, {category}) => {

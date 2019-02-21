@@ -56,11 +56,32 @@ CategoryMenu.propTypes = {
   selectedCategory: PropTypes.string
 };
 
-const mapStateToProps = ({categories, shared}, {category}) => {
+const mapStateToProps = ({categories, posts, shared}, {category}) => {
+  // Turn object into array
+  posts = Object.values(posts);
+
+  // Add property count with the count of posts
+  categories = Object.values(categories).map((category) => {
+    return {
+      ...category,
+      count: posts.reduce((count, post) => {
+        return count + (post.category === category.name && post.deleted === false ? 1 : 0);
+      }, 0)
+    };
+  });
+
+  // Finally add category all to show all posts
+  categories = [
+    {
+      name: 'all',
+      path: '',
+      count: posts.length
+    }, ...categories];
+
   return {
     shared,
+    categories,
     selectedCategory: category,
-    categories: Object.values(categories),
   };
 };
 

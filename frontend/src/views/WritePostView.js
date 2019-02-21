@@ -154,8 +154,6 @@ class WritePostView extends React.Component {
                       value={body}
                       onChange={this.handleChange}
                       maxLength={200}
-                      rows={2}
-                      autoHeight
                       error={bodyError === true}/>
                   </Form.Field>
                   <Form.Field>
@@ -179,12 +177,14 @@ class WritePostView extends React.Component {
                     labelPosition='left'
                     size='mini'
                     content='Cancel'
+                    disabled={this.state.saving === true}
                     onClick={this.goBack}/>
                   <Button
                     icon='write'
                     color='orange'
                     labelPosition='left'
                     size='mini'
+                    disabled={this.state.saving === true}
                     loading={this.state.saving === true}
                     content='Save'/>
                 </Form>

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
+import {Confirm, Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
 
 import CommentList from '../components/CommentList';
 import CustomLabel from '../components/CustomLabel';
@@ -11,9 +11,32 @@ import ResourceNotFoundView from './ResourceNotFoundView';
 import {formatDate} from '../utils/format';
 
 import {handleDeleteComment, handleRateComment, handleSaveComment} from '../actions/comments';
-import {handleRatePost} from '../actions/posts';
+import {handleRatePost, handleDeletePost} from '../actions/posts';
 
 class PostDetailView extends React.Component {
+
+  state = {
+    confirmDeletePost: false
+  };
+
+  confirmDeletePost = () => {
+    this.setState({
+      confirmDeletePost: true
+    });
+  };
+
+  cancelDeletePost = () => {
+    this.setState({
+      confirmDeletePost: false
+    });
+  };
+
+  deletePost = (id) => {
+    this.props.dispatch(handleDeletePost(id))
+      .then(() => {
+        this.props.history.push(`/${this.props.post.category}`);
+      });
+  };
 
   ratePost = (id, option) => {
     this.props.dispatch(handleRatePost(id, option));
@@ -66,7 +89,8 @@ class PostDetailView extends React.Component {
                     basic
                     content='Delete'
                     trigger={
-                      <Menu.Item as='a'>
+                      <Menu.Item as='a'
+                        onClick={this.confirmDelete}>
                         <Icon name='trash alternate'/>
                       </Menu.Item>}/>
                   <Popup
@@ -124,6 +148,14 @@ class PostDetailView extends React.Component {
               ? <div>Loading</div>
               : <ResourceNotFoundView />
         }
+        <Confirm
+          content='This post will be permanently deleted. Are you sure?'
+          confirmButton='Yes'
+          cancelButton='No. Forget it...'
+          size='small'
+          onConfirm={() => this.deletePost(post.id)}
+          onCancel={this.cancelDeletePost}
+          open={this.state.confirmDeletePost}/>
       </div>
     );
   }

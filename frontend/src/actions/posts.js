@@ -1,4 +1,5 @@
 import {
+  deletePost,
   getPosts,
   putPost,
   savePost,
@@ -97,3 +98,20 @@ export const decrementComment = (id) => (
     id
   }
 );
+
+const removePost = (id) => (
+  {
+    type: DELETE_POST,
+    id
+  }
+);
+
+export const handleDeletePost = (id) => (dispatch) => {
+  return deletePost(id)
+    .then(() => {
+      dispatch(removePost(id));
+    })
+    .catch((error) => {
+      console.warn('Error while deleting comment', error);
+    });
+};

@@ -11,12 +11,12 @@ const posts = (state = {}, action) => {
   switch (action.type) {
   case ADD_POST:
     return {
-      ...posts.concat(action.post)
+      ...posts.concat([action.post])
     };
   case DELETE_POST:
     return {
       ...posts.map((post) => {
-        if (post.id === action.post.id) {
+        if (post.id === action.id) {
           post.deleted = true;
         }
         return post;
@@ -38,8 +38,9 @@ const posts = (state = {}, action) => {
     };
   case UPDATE_POST:
     return {
-      ...posts.filter((post) => post.id !== action.post.id),
-      ...action.post
+      ...posts
+        .filter((post) => post.id !== action.post.id)
+        .concat([action.post])
     };
   case INCREMENT_COMMENT:
     return {

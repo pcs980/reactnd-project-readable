@@ -1,18 +1,19 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {Card, Icon, Label, Responsive} from 'semantic-ui-react';
+import {Button, Card, Icon, Label, Responsive, Segment} from 'semantic-ui-react';
 
 import Thermometer from './Thermometer';
 import CustomLabel from './CustomLabel';
 import {justDate} from '../utils/format';
 
 const PostItem = (props) => {
+  const {ratePost} = props;
   const {id, author, title, commentCount, voteScore, category} = props.post;
 
   return (
-    <Card as={Link} to={`/${category}/${id}`}>
-      <Card.Content>
+    <Card>
+      <Card.Content as={Link} to={`/${category}/${id}`}>
         <Card.Header>{title}</Card.Header>
         <Card.Meta>
           <Icon name='user' color='grey' size='small'/> {author} <Icon
@@ -21,7 +22,6 @@ const PostItem = (props) => {
       </Card.Content>
       <Card.Content extra textAlign='center'>
         <Label.Group circular>
-          <Thermometer score={voteScore}/>
           {
             commentCount > 0 && (
               <Responsive as={CustomLabel}
@@ -30,12 +30,23 @@ const PostItem = (props) => {
                 icon='comments'/>
             )
           }
-          <Responsive as={CustomLabel}
-            minWidth={Responsive.onlyTablet.minWidth}
-            icon='thumbs up'/>
-          <Responsive as={CustomLabel}
-            minWidth={Responsive.onlyTablet.minWidth}
-            icon='thumbs down'/>
+          <Segment>
+          <Thermometer score={voteScore}/>
+          <Button
+            icon circular basic
+            positive
+            size='mini'
+            onClick={() => ratePost(id, 'upVote')}>
+            <Icon name='thumbs up'/>
+          </Button>
+          <Button
+            icon circular basic
+            negative
+            size='mini'
+            onClick={() => ratePost(id, 'downVote')}>
+            <Icon name='thumbs down'/>
+          </Button>
+          </Segment>
         </Label.Group>
       </Card.Content>
     </Card>
@@ -44,6 +55,7 @@ const PostItem = (props) => {
 
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
+  ratePost: PropTypes.func.isRequired
 };
 
 export default PostItem;
