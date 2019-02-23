@@ -6,6 +6,14 @@ import {storeCategories} from './categories';
 import {handleGetPostComments} from './comments';
 
 export const SORT_POSTS = 'SORT_POSTS';
+export const SEARCH_POSTS = 'SEARCH_POSTS';
+
+export const searchPosts = (search) => (
+  {
+    type: SEARCH_POSTS,
+    search
+  }
+);
 
 export const sortPosts = (sortBy) => (
   {

@@ -10,7 +10,7 @@ import {handleInitialData} from '../actions/shared';
 import PostListView from '../views/PostListView';
 import PostDetailView from '../views/PostDetailView';
 import TopBar from './TopBar';
-import WritePostView from '../views/WritePostView';
+import PostWriteView from '../views/PostWriteView';
 
 class App extends Component {
 
@@ -29,8 +29,8 @@ class App extends Component {
               ? null
               : <Switch>
                 <Route path='/' exact component={PostListView}/>
-                <Route path='/post' exact component={WritePostView}/>
-                <Route path='/post/:postId' exact component={WritePostView}/>
+                <Route path='/post' exact component={PostWriteView}/>
+                <Route path='/post/:postId' exact component={PostWriteView}/>
                 <Route path='/:category' exact component={PostListView}/>
                 <Route path='/:category/:postId' exact component={PostDetailView}/>
               </Switch>

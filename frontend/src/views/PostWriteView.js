@@ -6,7 +6,7 @@ import {Button, Container, Form, Grid, Icon, Label, Menu, Segment} from 'semanti
 
 import {handleSavePost} from '../actions/posts';
 
-class WritePostView extends React.Component {
+class PostWriteView extends React.Component {
   state = {
     author: '',
     body: '',
@@ -97,6 +97,8 @@ class WritePostView extends React.Component {
   render() {
     const {action} = this.props;
     const {title, author, category, body, authorError, bodyError, categoryError, titleError} = this.state;
+    const postSizeLeft = 200 - body.length;
+
     return (
       <Container>
         <Menu secondary pointing icon>
@@ -149,7 +151,7 @@ class WritePostView extends React.Component {
                     }
                     <Form.TextArea
                       name='body'
-                      label='Post'
+                      label={`Post (${postSizeLeft} left)`}
                       placeholder='Open your heart and write your post ;)'
                       value={body}
                       onChange={this.handleChange}
@@ -197,7 +199,7 @@ class WritePostView extends React.Component {
   }
 }
 
-WritePostView.propTypes = {
+PostWriteView.propTypes = {
   action: PropTypes.string.isRequired,
   post: PropTypes.object,
   categories: PropTypes.array,
@@ -231,4 +233,4 @@ const mapStateToProps = ({categories, posts}, props) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(WritePostView));
+export default withRouter(connect(mapStateToProps)(PostWriteView));

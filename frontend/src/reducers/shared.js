@@ -1,7 +1,12 @@
-import {SORT_POSTS} from '../actions/shared';
+import {SEARCH_POSTS, SORT_POSTS} from '../actions/shared';
 
 const shared = (state = {}, action) => {
   switch (action.type) {
+  case SEARCH_POSTS:
+    return {
+      ...state,
+      searchPostByTitle: action.search
+    };
   case SORT_POSTS:
     /*
       Order logic (ascending or descending)

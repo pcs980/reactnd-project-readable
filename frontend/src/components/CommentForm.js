@@ -159,13 +159,13 @@ CommentForm.propTypes= {
 
 const mapStateToProps = ({comments}, {saveComment, id}) => {
 
-  const comment = Object.values(comments)
+  comments = Object.values(comments)
     .filter((comment) => comment.id === id);
 
   return {
     id,
     saveComment,
-    comment: comment.length > 0 ? comment[0] : undefined
+    comment: comments.length > 0 ? comments[0] : undefined
   };
 };
 

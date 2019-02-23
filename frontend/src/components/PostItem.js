@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {Button, Card, Icon, Label, Responsive, Segment} from 'semantic-ui-react';
+import {Button, Card, Icon, Label, Responsive} from 'semantic-ui-react';
 
 import Thermometer from './Thermometer';
 import CustomLabel from './CustomLabel';
@@ -30,7 +30,6 @@ const PostItem = (props) => {
                 icon='comments'/>
             )
           }
-          <Segment>
           <Thermometer score={voteScore}/>
           <Button
             icon circular basic
@@ -46,7 +45,6 @@ const PostItem = (props) => {
             onClick={() => ratePost(id, 'downVote')}>
             <Icon name='thumbs down'/>
           </Button>
-          </Segment>
         </Label.Group>
       </Card.Content>
     </Card>

@@ -9,12 +9,11 @@ import CategoryMenu from '../components/CategoryMenu';
 import PostList from '../components/PostList';
 
 import {handleRatePost} from '../actions/posts';
-import {sortPosts} from '../actions/shared';
+import {searchPosts, sortPosts} from '../actions/shared';
 
 class PostListView extends React.Component {
 
   ratePost = (id, option) => {
-    console.log(`rating ${option} ${id}`);
     this.props.dispatch(handleRatePost(id, option));
   };
 
@@ -22,15 +21,20 @@ class PostListView extends React.Component {
     this.props.dispatch(sortPosts(sortBy));
   };
 
+  clearSearch = () => {
+    this.props.dispatch(searchPosts(''));
+  };
+
   render() {
     return (
       <Grid columns={2}>
-        <Grid.Column width={4}>
+        <Grid.Column width={5}>
           <CategoryMenu category={this.props.selectedCategory}/>
         </Grid.Column>
-        <Grid.Column width={12}>
+        <Grid.Column width={11}>
           <PostListControl sortClick={this.handleSortPosts}/>
           <PostList
+            clearSearch={this.clearSearch}
             ratePost={this.ratePost}
             category={this.props.selectedCategory}/>
         </Grid.Column>
