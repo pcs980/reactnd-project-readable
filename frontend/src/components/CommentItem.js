@@ -1,9 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Comment, Confirm, Icon, Popup} from 'semantic-ui-react';
+import {Comment, Icon, Popup} from 'semantic-ui-react';
 
 import Thermometer from './Thermometer';
+import ModalConfirm from './ModalConfirm';
 import {friendlyDate} from '../utils/format';
 
 class CommentItem extends React.Component {
@@ -59,11 +60,8 @@ class CommentItem extends React.Component {
             </Comment.Action>
           </Comment.Actions>
         </Comment.Content>
-        <Confirm
+        <ModalConfirm
           content='This comment will be permanently deleted. Are you sure?'
-          confirmButton='Yes'
-          cancelButton='No. Forget it...'
-          size='small'
           onConfirm={() => deleteComment(comment.id)}
           onCancel={this.cancelDeleteComment}
           open={this.state.confirmDeleteComment}/>

@@ -2,11 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Link, withRouter} from 'react-router-dom';
-import {Confirm, Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
+import {Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semantic-ui-react';
 
 import CommentList from '../components/CommentList';
 import CustomLabel from '../components/CustomLabel';
 import Thermometer from '../components/Thermometer';
+import ModalConfirm from '../components/ModalConfirm';
 import ResourceNotFoundView from './ResourceNotFoundView';
 import {formatDate} from '../utils/format';
 
@@ -90,7 +91,7 @@ class PostDetailView extends React.Component {
                     content='Delete'
                     trigger={
                       <Menu.Item as='a'
-                        onClick={this.confirmDelete}>
+                        onClick={this.confirmDeletePost}>
                         <Icon name='trash alternate'/>
                       </Menu.Item>}/>
                   <Popup
@@ -148,11 +149,8 @@ class PostDetailView extends React.Component {
               ? <div>Loading</div>
               : <ResourceNotFoundView />
         }
-        <Confirm
+        <ModalConfirm
           content='This post will be permanently deleted. Are you sure?'
-          confirmButton='Yes'
-          cancelButton='No. Forget it...'
-          size='small'
           onConfirm={() => this.deletePost(post.id)}
           onCancel={this.cancelDeletePost}
           open={this.state.confirmDeletePost}/>

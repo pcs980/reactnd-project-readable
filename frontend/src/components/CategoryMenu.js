@@ -102,7 +102,9 @@ const mapStateToProps = ({categories, posts, shared}, {category}) => {
     {
       name: 'all',
       path: '',
-      count: posts.length
+      count: posts.reduce((count, post) => {
+        return count + (post.deleted === false ? 1 : 0);
+      }, 0)
     }, ...categories];
 
   return {
