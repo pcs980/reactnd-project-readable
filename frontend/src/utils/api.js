@@ -34,6 +34,7 @@ export const getPosts = () => {
 };
 
 export const putPost = (post) => {
+  post.timestamp = Date.now();
   return axios.put(`/posts/${post.id}`, post);
 };
 
@@ -56,6 +57,7 @@ export const saveComment = (comment) => {
 };
 
 export const putComment = (comment) => {
+  comment.timestamp = Date.now();
   return axios.put(`/comments/${comment.id}`, comment);
 };
 

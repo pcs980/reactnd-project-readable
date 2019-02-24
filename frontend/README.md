@@ -51,3 +51,30 @@ Click in home page's *New post* button or in post's *Edit* button to open **writ
 ![Write post](public/assets/img/post-write.png)
 
 All fields are required.
+
+### Searching posts
+
+You can search posts by title using the text box below categories list in home page:
+
+![Searching](public/assets/img/searching.png)
+
+1) Search text field.
+2) Clear search results.
+
+Filter by title works and by category works together. It means that clicking on any categories will show the posts of that category AND with the title searched.
+
+The orange bar appears while the search by title is active. Click in the *Show all* button to clear the filter by title.
+
+### Rating
+
+You can rate any post and comment by clicking in :thumbsup: *Up vote* and :thumbsdown: *Down vote* buttons.
+
+After voting the rating scale changes:
+
+![Rating scales](public/assets/img/rating-scales.png)
+
+## Known issues
+
+The Comment Form in [Post Detail](#post-detail) have a misbehavior page due to lack of knowledge about Redux.
+
+You can notice it by editing and saving an existing comment and then trying to add a new one.

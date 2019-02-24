@@ -7,14 +7,21 @@ import {Grid} from 'semantic-ui-react';
 import CategoryMenu from '../components/CategoryMenu';
 import PostList from '../components/PostList';
 import PostListControl from '../components/PostListControl';
+import {showEvent} from '../utils/toastEvent';
 
-import {handleRatePost} from '../actions/posts';
+import {handleRatePost, ratePost} from '../actions/posts';
 import {searchPosts, sortPosts} from '../actions/shared';
 
 class PostListView extends React.Component {
 
   ratePost = (id, option) => {
-    this.props.dispatch(handleRatePost(id, option));
+    this.props.dispatch(handleRatePost(id, option))
+      .then(() => {
+        this.props.dispatch(ratePost(id, option));
+      })
+      .catch(() => {
+        showEvent('error', 'Your rate wasn\'t saved. Please, try again later.');
+      });
   };
 
   handleSortPosts = (sortBy) => {
