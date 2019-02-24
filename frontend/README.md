@@ -1,4 +1,4 @@
-# Readable Frontend
+# [![Readable Frontend](public/assets/img/app-cover.png)](https://pixabay.com/pt/homem-leitura-touchscreen-blog-791049/)
 
 This app is free and colaborative. Requires no authentication or previous registration. You can create, edit and delete any post or comments freely.
 
