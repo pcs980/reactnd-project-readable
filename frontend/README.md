@@ -1,4 +1,5 @@
 # [![Readable Frontend](public/assets/img/app-cover.png)](https://pixabay.com/pt/homem-leitura-touchscreen-blog-791049/)
+##### Image from [Pixabay](https://www.pixabay.com)
 
 This app is free and colaborative. Requires no authentication or previous registration. You can create, edit and delete any post or comments freely.
 
@@ -16,6 +17,18 @@ npm start
 ```
 
 After few seconds open [http://localhost:3000](http://localhost:3000) in your web browser.
+
+#### External packages
+
+This project uses the following 3rd party packages:
+
+* [Axios](https://www.npmjs.com/package/axios): Promise based HTTP client for the browser and node.js
+* [Lodash.Debounce](https://www.npmjs.com/package/lodash.debounce): The lodash method `_.debounce` exported as a module.
+* [Moment](https://www.npmjs.com/package/moment): Parse, validate, manipulate, and display dates
+* [Prop Types](https://www.npmjs.com/package/prop-types): Runtime type checking for React props and similar objects.
+* [React Redux Loading](https://www.npmjs.com/package/react-redux-loading): Unmaintained fork of react-redux-loading-bar to avoid any breaking changes.
+* [Semantic UI React](https://www.npmjs.com/package/semantic-ui-react): The official Semantic-UI-React integration.
+* [React Toastify](https://www.npmjs.com/package/react-toastify): React notification made easy
 
 ## Views
 
