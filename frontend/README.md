@@ -56,7 +56,7 @@ All fields are required.
 
 You can search posts by title using the text box below categories list in home page:
 
-![Searching](public/assets/img/searching.png)
+![Searching](public/assets/img/search-posts.png)
 
 1) Search text field.
 2) Clear search results.
