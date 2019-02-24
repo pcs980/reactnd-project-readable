@@ -29,7 +29,7 @@ const Thermometer = (props) => {
       trigger={
         <Label basic image color='grey'>
           <Icon name={`thermometer ${scale}`} color={color}/>
-          {props.score}º
+          {props.score}
         </Label>
       }
       on='click'

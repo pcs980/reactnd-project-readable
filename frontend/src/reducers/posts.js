@@ -1,17 +1,21 @@
-import {ADD_POST,
+import {STORE_POST,
   DELETE_POST,
   GET_ALL_POSTS,
   RATE_POST,
-  UPDATE_POST,
   INCREMENT_COMMENT,
   DECREMENT_COMMENT} from '../actions/posts';
 
 const posts = (state = {}, action) => {
   const posts = Object.values(state);
   switch (action.type) {
-  case ADD_POST:
+  case DECREMENT_COMMENT:
     return {
-      ...posts.concat([action.post])
+      ...posts.map((post) => {
+        if (post.id === action.id) {
+          post.commentCount--;
+        }
+        return post;
+      })
     };
   case DELETE_POST:
     return {
@@ -27,21 +31,6 @@ const posts = (state = {}, action) => {
       ...state,
       ...action.posts
     };
-  case RATE_POST:
-    return {
-      ...posts.map((post) => {
-        if (post.id === action.id) {
-          post.voteScore += action.option === 'upVote' ? 1 : -1;
-        }
-        return post;
-      })
-    };
-  case UPDATE_POST:
-    return {
-      ...posts
-        .filter((post) => post.id !== action.post.id)
-        .concat([action.post])
-    };
   case INCREMENT_COMMENT:
     return {
       ...posts.map((post) => {
@@ -51,14 +40,20 @@ const posts = (state = {}, action) => {
         return post;
       })
     };
-  case DECREMENT_COMMENT:
+  case RATE_POST:
     return {
       ...posts.map((post) => {
         if (post.id === action.id) {
-          post.commentCount--;
+          post.voteScore += action.option === 'upVote' ? 1 : -1;
         }
         return post;
       })
+    };
+  case STORE_POST:
+    return {
+      ...posts
+        .filter((post) => post.id !== action.post.id)
+        .concat([action.post])
     };
   default:
     return state;

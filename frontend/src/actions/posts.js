@@ -5,48 +5,26 @@ import {
   savePost,
   updateRatePost} from '../utils/api';
 
-export const ADD_POST = 'SAVE_POST';
+export const STORE_POST = 'STORE_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const GET_ALL_POSTS = 'GET_ALL_POSTS';
 export const RATE_POST = 'RATE_POST';
-export const UPDATE_POST = 'UPDATE_POST';
 
 export const INCREMENT_COMMENT = 'INCREMENT_COMMENT';
 export const DECREMENT_COMMENT = 'DECREMENT_COMMENT';
 
-const storePost = (post) => (
+export const storePost = (post) => (
   {
-    type: ADD_POST,
+    type: STORE_POST,
     post
   }
 );
 
-const updatePost = (post) => (
-  {
-    type: UPDATE_POST,
-    post
-  }
-);
-
-export const handleSavePost = (post) => (dispatch) => {
+export const handleSavePost = (post) => () => {
   if (post.id) {
-    return putPost(post)
-      .then(({data}) => {
-        console.log('updated post', data);
-        dispatch(updatePost(data));
-      })
-      .catch((error) => {
-        console.warn('Error while updating post', error);
-      });
+    return putPost(post);
   } else {
-    return savePost(post)
-      .then(({data}) => {
-        console.log('saved post', data);
-        dispatch(storePost(data));
-      })
-      .catch((error) => {
-        console.warn('Error while saving post', error);
-      });
+    return savePost(post);
   }
 };
 
@@ -63,11 +41,11 @@ export const handleGetPosts = () => (dispatch) => {
       dispatch(this.storePosts(posts));
     })
     .catch((error) => {
-      console.warn('Error while getting all posts', error);
+      console.error('Error while getting all posts', error);
     });
 };
 
-const ratePost = (id, option) => (
+export const ratePost = (id, option) => (
   {
     type: RATE_POST,
     id,
@@ -75,14 +53,8 @@ const ratePost = (id, option) => (
   }
 );
 
-export const handleRatePost = (id, option) => (dispatch) => {
-  return updateRatePost(id, option)
-    .then(() => {
-      dispatch(ratePost(id, option));
-    })
-    .catch((error) => {
-      console.warn('Error while rating comment', error);
-    });
+export const handleRatePost = (id, option) => () => {
+  return updateRatePost(id, option);
 };
 
 export const incrementComment = (id) => (
@@ -99,19 +71,13 @@ export const decrementComment = (id) => (
   }
 );
 
-const removePost = (id) => (
+export const removePost = (id) => (
   {
     type: DELETE_POST,
     id
   }
 );
 
-export const handleDeletePost = (id) => (dispatch) => {
-  return deletePost(id)
-    .then(() => {
-      dispatch(removePost(id));
-    })
-    .catch((error) => {
-      console.warn('Error while deleting comment', error);
-    });
+export const handleDeletePost = (id) => () => {
+  return deletePost(id);
 };

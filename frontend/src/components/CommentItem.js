@@ -10,18 +10,18 @@ import {friendlyDate} from '../utils/format';
 class CommentItem extends React.Component {
 
   state = {
-    confirmDeleteComment: false
+    open: false
   };
 
-  confirmDeleteComment = () => {
+  openDeleteModal = () => {
     this.setState({
-      confirmDeleteComment: true
+      open: true
     });
   };
 
-  cancelDeleteComment = () => {
+  closeDeleteModal = () => {
     this.setState({
-      confirmDeleteComment: false
+      open: false
     });
   };
 
@@ -56,15 +56,15 @@ class CommentItem extends React.Component {
             <Comment.Action>
               <Popup basic content='Delete'
                 trigger={<Icon name='trash alternate'
-                  onClick={this.confirmDeleteComment}/>}/>
+                  onClick={this.openDeleteModal}/>}/>
             </Comment.Action>
           </Comment.Actions>
         </Comment.Content>
         <ModalConfirm
           content='This comment will be permanently deleted. Are you sure?'
           onConfirm={() => deleteComment(comment.id)}
-          onCancel={this.cancelDeleteComment}
-          open={this.state.confirmDeleteComment}/>
+          onCancel={this.closeDeleteModal}
+          open={this.state.open}/>
       </Comment>
     );
   }

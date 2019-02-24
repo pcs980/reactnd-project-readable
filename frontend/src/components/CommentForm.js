@@ -11,7 +11,6 @@ class CommentForm extends React.Component {
     body: '',
     authorError: false,
     bodyError: false,
-    loaded: false,
     saved: false,
     saving: false,
   };
@@ -30,14 +29,14 @@ class CommentForm extends React.Component {
     event.preventDefault();
     if (this.state.saving === true) return;
 
-    const {id, author, body} = this.state;
-    author.trim();
-    body.trim();
+    let {id, author, body} = this.state;
+    author = author.trim();
+    body = body.trim();
 
     const authorError = author === '';
     const bodyError = body === '';
 
-    if (authorError || bodyError) {
+    if (authorError === true || bodyError === true) {
       this.setState({
         authorError,
         bodyError
@@ -53,30 +52,46 @@ class CommentForm extends React.Component {
       this.setState({
         saving: true
       }, () => {
-        this.props.saveComment(comment)
-          .then(() => {
-            // Finish saving and clear state
-            this.setState({
-              id: undefined,
-              saved: true,
-              saving: false
+        if (id) {
+          this.props.updateComment(comment)
+            .then(() => {
+              // Finish saving and clear state
+              this.setState(this.clearState(true, false));
             });
-          });
+        } else {
+          this.props.saveComment(comment)
+            .then(() => {
+              // Finish saving and clear state
+              this.setState(this.clearState(true, false));
+            });
+        }
       });
     }
   };
 
+  clearState = (saved, saving) => (
+    {
+      id: '',
+      author: '',
+      body: '',
+      authorError: false,
+      bodyError: false,
+      saved: saved,
+      saving: saving
+    }
+  );
+
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.saved === true) {
+    if (prevState.saved === true || (!nextProps.comment && prevState.id !== '')) {
       return {
-        id: undefined,
+        id: '',
         author: '',
         body: '',
         saved: false,
         authorError: false,
         bodyError: false,
       };
-    } else if ((nextProps.comment && prevState.loaded === false)) {
+    } else if ((nextProps.comment && (prevState.id === undefined || prevState.id !== nextProps.comment.id))) {
       return {
         id: nextProps.comment.id,
         author: nextProps.comment.author,
@@ -84,7 +99,6 @@ class CommentForm extends React.Component {
         authorError: false,
         bodyError: false,
         saved: false,
-        loaded: true
       };
     }
 
@@ -153,12 +167,12 @@ class CommentForm extends React.Component {
 
 CommentForm.propTypes= {
   history: PropTypes.object.isRequired,
+  cancelEdition: PropTypes.func.isRequired,
   saveComment: PropTypes.func.isRequired,
-  cancelEdition: PropTypes.func.isRequired
+  updateComment: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({comments}, {saveComment, id}) => {
-
   comments = Object.values(comments)
     .filter((comment) => comment.id === id);
 

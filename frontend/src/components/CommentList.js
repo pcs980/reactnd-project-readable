@@ -19,12 +19,12 @@ class CommentList extends React.Component {
 
   cancelCommentEdit = () => {
     this.setState({
-      editCommentId: undefined
+      editCommentId: ''
     });
-  }
+  };
 
   render() {
-    const {comments, saveComment, rateComment, deleteComment} = this.props;
+    const {comments, deleteComment, rateComment, saveComment, updateComment} = this.props;
 
     return (
       <Grid centered>
@@ -48,7 +48,8 @@ class CommentList extends React.Component {
               <CommentForm
                 id={this.state.editCommentId}
                 cancelEdition={this.cancelCommentEdit}
-                saveComment={saveComment}/>
+                saveComment={saveComment}
+                updateComment={updateComment}/>
             </Comment.Group>
           </Grid.Column>
         </Grid.Row>
@@ -59,10 +60,11 @@ class CommentList extends React.Component {
 
 CommentList.propTypes = {
   id: PropTypes.string.isRequired,
-  saveComment: PropTypes.func.isRequired,
-  rateComment: PropTypes.func.isRequired,
+  comments: PropTypes.array.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  comments: PropTypes.array.isRequired
+  rateComment: PropTypes.func.isRequired,
+  saveComment: PropTypes.func.isRequired,
+  updateComment: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({comments}, {id, saveComment, rateComment, deleteComment}) => {

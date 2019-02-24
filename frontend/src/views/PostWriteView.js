@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {Button, Container, Form, Grid, Icon, Label, Menu, Segment} from 'semantic-ui-react';
 
-import {handleSavePost} from '../actions/posts';
+import {showEvent} from '../utils/toastEvent';
+
+import {handleSavePost, storePost} from '../actions/posts';
 
 class PostWriteView extends React.Component {
   state = {
@@ -33,6 +35,7 @@ class PostWriteView extends React.Component {
 
   submitPost = (event) => {
     event.preventDefault();
+    const {dispatch, history} = this.props;
     const {id, author, title, body, category, saving} = this.state;
     if (saving === true) return;
 
@@ -61,10 +64,17 @@ class PostWriteView extends React.Component {
       this.setState({
         saving: true
       }, () => {
-        this.props.dispatch(handleSavePost(post))
-          .then(() => {
-            // Finish saving and clear state
-            this.props.history.push(`/${category}/${id}`);
+        dispatch(handleSavePost(post))
+          .then(({data}) => {
+            dispatch(storePost(data));
+            history.push(`/${category}/${id}`);
+          })
+          .catch(() => {
+            // Finish saving and show error message
+            this.setState({
+              saving: false
+            });
+            showEvent('error', 'The post wasn\'t saved. Please, try again later.');
           });
       });
     }

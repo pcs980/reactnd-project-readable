@@ -1,4 +1,4 @@
-# Readable App
+# Readable Frontend
 
 This app is free and colaborative. Requires no authentication or previous registration. You can create, edit and delete any post or comments freely.
 
@@ -6,34 +6,24 @@ There are no moderators. So we ask you to post only positive messages.
 
 ## Installation
 
-### Clone
-
-First, clone the project:
-
-```sh
-git clone
-```
-
 ### Dependencies
 
-After cloning you access the project's folder and install dependencies:
+To install an start web application, run the following commands in this directory:
 
 ```sh
-cd readable
 npm install
-```
-
-### Run
-
-Then run the application:
-
-```sh
 npm start
 ```
 
-## Features
+After few seconds open [http://localhost:3000](http://localhost:3000) in your web browser.
+
+## Views
+
+### Home
 
 See below the **Readable**'s home page:
+
+![Home Page](public/assets/img/home-page.png)
 
 1) Top bar leads to home page.
 2) List of all categories. Clicking in a category will filter posts.
@@ -41,11 +31,23 @@ See below the **Readable**'s home page:
 4) Leads to *New post* page where you can write a brand new post.
 5) Allow sort posts by title, score or date. Clicking in the same option will toggle order, ascending or descending.
 6) Grid with post cards. Each card shows the post title, author, date, score and number of comments.
+7) Search by post's title.
 
+### Post detail
 
-Click in any post card to
+Click in any post card to show the **details page**:
+
+![Post detail](public/assets/img/post-detail.png)
 
 1) Controls to Create a new post, Edit, Delete, Up vote or Down vote the current post.
 2) Current post details.
 3) Post's comments. Hover mouse over a comment to show hidden controls with it's score and buttons to up vote, down vote, edit or delete.
 4) Form to add or edit a comment.
+
+### Write post
+
+Click in home page's *New post* button or in post's *Edit* button to open **write page**:
+
+![Write post](public/assets/img/post-write.png)
+
+All fields are required.

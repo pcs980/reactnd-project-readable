@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {Grid} from 'semantic-ui-react';
 
-import PostListControl from '../components/PostListControl';
 import CategoryMenu from '../components/CategoryMenu';
 import PostList from '../components/PostList';
+import PostListControl from '../components/PostListControl';
 
 import {handleRatePost} from '../actions/posts';
 import {searchPosts, sortPosts} from '../actions/shared';

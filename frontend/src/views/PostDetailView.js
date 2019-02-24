@@ -6,54 +6,99 @@ import {Container, Grid, Header, Icon, Label, Menu, Popup, Segment} from 'semant
 
 import CommentList from '../components/CommentList';
 import CustomLabel from '../components/CustomLabel';
-import Thermometer from '../components/Thermometer';
 import ModalConfirm from '../components/ModalConfirm';
 import ResourceNotFoundView from './ResourceNotFoundView';
+import Thermometer from '../components/Thermometer';
 import {formatDate} from '../utils/format';
+import {showEvent} from '../utils/toastEvent';
 
-import {handleDeleteComment, handleRateComment, handleSaveComment} from '../actions/comments';
-import {handleRatePost, handleDeletePost} from '../actions/posts';
+import {handleDeleteComment, handleRateComment, handleSaveComment, rateComment, removeComment, storeComment} from '../actions/comments';
+import {handleRatePost, handleDeletePost, ratePost, removePost, decrementComment, incrementComment} from '../actions/posts';
 
 class PostDetailView extends React.Component {
 
   state = {
-    confirmDeletePost: false
+    open: false
   };
 
   confirmDeletePost = () => {
     this.setState({
-      confirmDeletePost: true
+      open: true
     });
   };
 
-  cancelDeletePost = () => {
+  closeDeleteConfirm = () => {
     this.setState({
-      confirmDeletePost: false
+      open: false
     });
   };
 
   deletePost = (id) => {
-    this.props.dispatch(handleDeletePost(id))
+    const {dispatch, history, post} = this.props;
+    this.closeDeleteConfirm();
+    dispatch(handleDeletePost(id))
       .then(() => {
-        this.props.history.push(`/${this.props.post.category}`);
+        dispatch(removePost(id));
+        history.push(`/${post.category}`);
+      })
+      .catch(() => {
+        showEvent('error', 'The post wasn\'t deleted. Please, try again later.');
       });
   };
 
   ratePost = (id, option) => {
-    this.props.dispatch(handleRatePost(id, option));
-  };
-
-  saveComment = (comment) => {
-    comment.parentId = this.props.post.id;
-    return this.props.dispatch(handleSaveComment(comment));
-  };
-
-  rateComment = (id, option) => {
-    this.props.dispatch(handleRateComment(id, option));
+    this.props.dispatch(handleRatePost(id, option))
+      .then(() => {
+        this.props.dispatch(ratePost(id, option));
+      })
+      .catch(() => {
+        showEvent('error', 'Your rate wasn\'t saved. Please, try again later.');
+      });
   };
 
   deleteComment = (id) => {
-    this.props.dispatch(handleDeleteComment(id));
+    this.props.dispatch(handleDeleteComment(id))
+      .then(({data}) => {
+        this.props.dispatch(removeComment(id));
+        // Decrement post's comment count
+        this.props.dispatch(decrementComment(data.parentId));
+      })
+      .catch(() => {
+        showEvent('error', 'The comment wasn\'t deleted. Please, try again later.');
+      });
+  };
+
+  updateComment = (comment) => {
+    return this.props.dispatch(handleSaveComment(comment))
+      .then(({data}) => {
+        this.props.dispatch(storeComment(data));
+      })
+      .catch(() => {
+        showEvent('error', 'The comment wasn\'t updated. Please, try again later.');
+      });
+  }
+
+  saveComment = (comment) => {
+    comment.parentId = this.props.post.id;
+    return this.props.dispatch(handleSaveComment(comment))
+      .then(({data}) => {
+        this.props.dispatch(storeComment(data));
+        // Increment comment count
+        this.props.dispatch(incrementComment(data.parentId));
+      })
+      .catch(() => {
+        showEvent('error', 'The comment wasn\'t saved. Please, try again later.');
+      });
+  };
+
+  rateComment = (id, option) => {
+    this.props.dispatch(handleRateComment(id, option))
+      .then(() => {
+        this.props.dispatch(rateComment(id, option));
+      })
+      .catch(() => {
+        showEvent('error', 'Your rate wasn\'t saved. Please, try again later.');
+      });
   };
 
   render() {
@@ -141,6 +186,7 @@ class PostDetailView extends React.Component {
                 <CommentList
                   id={post.id}
                   saveComment={this.saveComment}
+                  updateComment={this.updateComment}
                   rateComment={this.rateComment}
                   deleteComment={this.deleteComment}/>
               </Segment>
@@ -152,8 +198,8 @@ class PostDetailView extends React.Component {
         <ModalConfirm
           content='This post will be permanently deleted. Are you sure?'
           onConfirm={() => this.deletePost(post.id)}
-          onCancel={this.cancelDeletePost}
-          open={this.state.confirmDeletePost}/>
+          onCancel={this.closeDeleteConfirm}
+          open={this.state.open}/>
       </div>
     );
   }
@@ -171,13 +217,13 @@ const mapStateToProps = ({comments, posts, loadingBar}, props) => {
   const {postId} = props.match.params;
 
   // Get post by id from list of posts in store
-  const post = Object.values(posts)
+  posts = Object.values(posts)
     .filter((post) => post.id === postId);
 
   return {
     comments: Object.values(comments),
     loading: loadingBar.default === 1,
-    post: post.length > 0 ? post[0] : undefined,
+    post: posts.length > 0 ? posts[0] : undefined,
   };
 };
 
