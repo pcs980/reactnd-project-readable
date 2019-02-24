@@ -12,35 +12,41 @@ class PostList extends React.Component {
     const {posts, shared, loading, ratePost, clearSearch} = this.props;
     const order = shared.order || 'ascending';
 
+    const searchAlertBar =
+      <Segment inverted color='orange'>
+        <Grid columns={2}>
+          <Grid.Row>
+            <Grid.Column width={12}>
+              <Icon
+                name='exclamation triangle'
+                inverted size='small'/>
+              {`Showing posts with '${shared.searchPostByTitle}'`}
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <Button icon
+                floated='right'
+                size='mini'
+                onClick={clearSearch}>
+                Show all
+              </Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>;
+
     if (posts.length === 0 && loading === false) {
-      return (<ResourceNotFoundView backButton={false}/>);
+      return (
+        <div>
+          {searchAlertBar}
+          <ResourceNotFoundView backButton={false}/>
+        </div>
+      );
     }
 
     return (
       <div>
         {
-          shared.searchPostByTitle && (
-            <Segment inverted color='orange'>
-              <Grid columns={2}>
-                <Grid.Row>
-                  <Grid.Column width={12}>
-                    <Icon
-                      name='exclamation triangle'
-                      inverted size='small'/>
-                    {`Showing posts with '${shared.searchPostByTitle}'`}
-                  </Grid.Column>
-                  <Grid.Column width={4}>
-                    <Button icon
-                      floated='right'
-                      size='mini'
-                      onClick={clearSearch}>
-                      Show all
-                    </Button>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Segment>
-          )
+          shared.searchPostByTitle && searchAlertBar
         }
         <Card.Group itemsPerRow={2}>
           {
