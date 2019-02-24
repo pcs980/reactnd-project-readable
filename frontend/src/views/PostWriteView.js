@@ -113,7 +113,7 @@ class PostWriteView extends React.Component {
       <Container>
         <Menu secondary pointing icon size='small'>
           <Menu.Item header
-            onClick={this.props.history.goBack}>
+            onClick={this.goBack}>
             <Icon name='arrow left'/>
             {action}
           </Menu.Item>

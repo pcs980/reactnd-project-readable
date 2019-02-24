@@ -8,10 +8,11 @@ import {Container} from 'semantic-ui-react';
 
 import {handleInitialData} from '../actions/shared';
 
-import PostListView from '../views/PostListView';
+import Loading from './Loading';
 import PostDetailView from '../views/PostDetailView';
-import TopBar from './TopBar';
+import PostListView from '../views/PostListView';
 import PostWriteView from '../views/PostWriteView';
+import TopBar from './TopBar';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -29,7 +30,7 @@ class App extends Component {
           <TopBar />
           {
             this.props.loading === true
-              ? null
+              ? <Loading />
               : <Switch>
                 <Route path='/' exact component={PostListView}/>
                 <Route path='/post' exact component={PostWriteView}/>

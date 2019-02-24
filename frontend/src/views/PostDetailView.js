@@ -191,9 +191,9 @@ class PostDetailView extends React.Component {
                   deleteComment={this.deleteComment}/>
               </Segment>
             </Container>
-            : loading === true
-              ? <div>Loading</div>
-              : <ResourceNotFoundView />
+            : loading !== true && (
+              <ResourceNotFoundView />
+            )
         }
         <ModalConfirm
           content='This post will be permanently deleted. Are you sure?'

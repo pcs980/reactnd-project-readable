@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Button, Card, Grid, Icon, Loader, Segment} from 'semantic-ui-react';
+import {Button, Card, Grid, Icon, Segment} from 'semantic-ui-react';
 
 import PostItem from './PostItem';
 import ResourceNotFoundView from '../views/ResourceNotFoundView';
@@ -13,10 +13,8 @@ class PostList extends React.Component {
     const order = shared.order || 'ascending';
 
     if (posts.length === 0) {
-      if (loading === true) {
-        return (<Loader active inline='centered' />);
-      } else {
-        return (<ResourceNotFoundView />);
+      if (loading === false) {
+        return (<ResourceNotFoundView backButton={false}/>);
       }
     }
 
