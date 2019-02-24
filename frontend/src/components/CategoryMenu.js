@@ -24,6 +24,7 @@ class CategoryMenu extends React.Component {
     }
   };
 
+  // Use debounce to avoid dispatch action at any typing
   debounceDispatchSearch = debounce((search) => {
     this.setState({
       goneSearch: true
@@ -84,10 +85,10 @@ CategoryMenu.propTypes = {
 };
 
 const mapStateToProps = ({categories, posts, shared}, {category}) => {
-  // Turn object into array
+  // Turn object into iterable array
   posts = Object.values(posts);
 
-  // Add property count with the count of posts
+  // Add count property with number of each categories' posts
   categories = Object.values(categories).map((category) => {
     return {
       ...category,

@@ -12,10 +12,8 @@ class PostList extends React.Component {
     const {posts, shared, loading, ratePost, clearSearch} = this.props;
     const order = shared.order || 'ascending';
 
-    if (posts.length === 0) {
-      if (loading === false) {
-        return (<ResourceNotFoundView backButton={false}/>);
-      }
+    if (posts.length === 0 && loading === false) {
+      return (<ResourceNotFoundView backButton={false}/>);
     }
 
     return (

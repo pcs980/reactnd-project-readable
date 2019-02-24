@@ -173,6 +173,7 @@ CommentForm.propTypes= {
 };
 
 const mapStateToProps = ({comments}, {saveComment, id}) => {
+  // Turn comments into iterable array and filter by parent id
   comments = Object.values(comments)
     .filter((comment) => comment.id === id);
 

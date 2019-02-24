@@ -67,15 +67,15 @@ CommentList.propTypes = {
   updateComment: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({comments}, {id, saveComment, rateComment, deleteComment}) => {
-  return {
+const mapStateToProps = ({comments}, {id, saveComment, rateComment, deleteComment}) => (
+  {
     id,
     saveComment,
     rateComment,
     deleteComment,
     comments: Object.values(comments)
       .filter((comment) => comment.parentId === id && comment.deleted === false)
-  };
-};
+  }
+);
 
 export default connect(mapStateToProps)(CommentList);

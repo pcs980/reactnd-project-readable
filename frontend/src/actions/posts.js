@@ -21,6 +21,7 @@ export const storePost = (post) => (
 );
 
 export const handleSavePost = (post) => () => {
+  // It's a post edition if there's an id
   if (post.id) {
     return putPost(post);
   } else {

@@ -225,8 +225,10 @@ const mapStateToProps = ({categories, posts}, props) => {
   const post = Object.values(posts)
     .filter((post) => post.id === postId);
 
-  // Remove category 'all' and create list of Select's valid items
-  const categoriesValues = Object.values(categories)
+  // Turn categories into iterable array,
+  // remove category 'all'
+  // and create list of Select's valid items
+  categories = Object.values(categories)
     .filter((category) => category.name !== 'all')
     .map((category) => (
       {
@@ -238,8 +240,8 @@ const mapStateToProps = ({categories, posts}, props) => {
 
   return {
     action,
-    post: post.length > 0 ? post[0] : null,
-    categories: categoriesValues
+    categories,
+    post: post.length > 0 ? post[0] : null
   };
 };
 

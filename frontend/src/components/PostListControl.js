@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {Icon, Menu} from 'semantic-ui-react';
 
+// List of fields prepared to sort posts
 const sortParameters = [
   {
     caption: 'Title',
@@ -22,7 +23,6 @@ const sortParameters = [
   }
 ];
 
-// TODO: add 'New post' button and search field
 const PostListControl = (props) => (
   <Menu fluid secondary pointing size='small' icon>
     <Menu.Item as={Link} to='/post'>
@@ -55,11 +55,11 @@ PostListControl.propTypes = {
   sortClick: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({shared}) => {
-  return {
+const mapStateToProps = ({shared}) => (
+  {
     sortBy: shared.sortBy,
     order: shared.order
-  };
-};
+  }
+);
 
 export default connect(mapStateToProps)(PostListControl);

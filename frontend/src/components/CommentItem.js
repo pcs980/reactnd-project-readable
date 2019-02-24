@@ -78,14 +78,14 @@ CommentItem.propTypes = {
   deleteComment: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({comments}, {comment, editComment, rateComment, deleteComment}) => {
-  return {
+const mapStateToProps = ({comments}, {comment, editComment, rateComment, deleteComment}) => (
+  {
     comment,
     editComment,
     rateComment,
     deleteComment,
     comments
-  };
-};
+  }
+);
 
 export default connect(mapStateToProps)(CommentItem);

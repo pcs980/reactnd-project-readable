@@ -54,10 +54,10 @@ App.propTypes = {
   loading: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = ({loadingBar}) => {
-  return {
+const mapStateToProps = ({loadingBar}) => (
+  {
     loading: loadingBar.default === 1,
-  };
-};
+  }
+);
 
 export default connect(mapStateToProps)(App);
