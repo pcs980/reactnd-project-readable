@@ -8,9 +8,33 @@ import ResourceNotFoundView from '../views/ResourceNotFoundView';
 
 class PostList extends React.Component {
 
+  // Sort fields accordingly to it's type (numeric or alphabetic)
+  resolveOrder = (a, b) => {
+    const {sortBy, fielType} = this.props.shared;
+    const order = this.props.shared.order || 'ascending';
+
+    if (order === 'ascending') {
+      if (fielType === 'numeric') {
+        return a[sortBy] - b[sortBy];
+      } else {
+        if (a[sortBy] > b[sortBy]) {
+          return 1;
+        }
+      }
+    } else {
+      if (fielType === 'numeric') {
+        return b[sortBy] - a[sortBy];
+      } else {
+        if (b[sortBy] > a[sortBy]) {
+          return 1;
+        }
+      }
+    }
+    return 0;
+  };
+
   render() {
     const {posts, shared, loading, ratePost, clearSearch} = this.props;
-    const order = shared.order || 'ascending';
 
     const searchAlertBar =
       <Segment inverted color='orange'>
@@ -50,12 +74,7 @@ class PostList extends React.Component {
         }
         <Card.Group itemsPerRow={2}>
           {
-            posts.sort((a, b) => {
-              if (order === 'ascending') {
-                return a[shared.sortBy] > b[shared.sortBy];
-              } else {
-                return b[shared.sortBy] > a[shared.sortBy];
-              }})
+            posts.sort((a, b) => this.resolveOrder(a, b))
               .map((post) => (
                 <PostItem
                   key={post.id}

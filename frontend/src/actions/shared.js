@@ -15,10 +15,11 @@ export const searchPosts = (search) => (
   }
 );
 
-export const sortPosts = (sortBy) => (
+export const sortPosts = (sortBy, fieldType) => (
   {
     type: SORT_POSTS,
-    sortBy
+    sortBy,
+    fieldType
   }
 );
 
@@ -45,7 +46,7 @@ export const handleInitialData = () => (dispatch) => {
       dispatch(storePosts(posts));
 
       // Set timestamp as default sort field
-      dispatch(sortPosts('timestamp'));
+      dispatch(sortPosts('timestamp', 'numeric'));
 
       dispatch(hideLoading());
     });

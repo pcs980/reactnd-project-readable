@@ -9,52 +9,54 @@ const posts = (state = {}, action) => {
   const posts = Object.values(state);
   switch (action.type) {
   case DECREMENT_COMMENT:
-    return {
-      ...posts.map((post) => {
-        if (post.id === action.id) {
-          post.commentCount--;
-        }
-        return post;
-      })
-    };
+    return posts.map((post) => {
+      if (post.id === action.id) {
+        return {
+          ...post,
+          commentCount: post.commentCount - 1
+        };
+      }
+      return post;
+    });
   case DELETE_POST:
-    return {
-      ...posts.map((post) => {
-        if (post.id === action.id) {
-          post.deleted = true;
-        }
-        return post;
-      })
-    };
+    return posts.map((post) => {
+      if (post.id === action.id) {
+        return {
+          ...post,
+          deleted: true
+        };
+      }
+      return post;
+    });
   case GET_ALL_POSTS:
     return {
       ...state,
       ...action.posts
     };
   case INCREMENT_COMMENT:
-    return {
-      ...posts.map((post) => {
-        if (post.id === action.id) {
-          post.commentCount++;
-        }
-        return post;
-      })
-    };
+    return posts.map((post) => {
+      if (post.id === action.id) {
+        return {
+          ...post,
+          commentCount: post.commentCount + 1
+        };
+      }
+      return post;
+    });
   case RATE_POST:
-    return {
-      ...posts.map((post) => {
-        if (post.id === action.id) {
-          post.voteScore += action.option === 'upVote' ? 1 : -1;
-        }
-        return post;
-      })
-    };
+    return posts.map((post) => {
+      if (post.id === action.id) {
+        return {
+          ...post,
+          voteScore: post.voteScore + (action.option === 'upVote' ? 1 : -1)
+        };
+      }
+      return post;
+    });
   case STORE_POST:
-    return {
-      ...posts
-        .filter((post) => post.id !== action.post.id)
-        .concat([action.post])
-    };
+    return posts
+      .filter((post) => post.id !== action.post.id)
+      .concat([action.post]);
   default:
     return state;
   }

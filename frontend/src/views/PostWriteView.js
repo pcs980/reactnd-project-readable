@@ -35,7 +35,7 @@ class PostWriteView extends React.Component {
 
   submitPost = (event) => {
     event.preventDefault();
-    const {dispatch, history} = this.props;
+    const {doStorePost, onSavePost, history} = this.props;
     const {id, author, title, body, category, saving} = this.state;
     if (saving === true) return;
 
@@ -64,9 +64,9 @@ class PostWriteView extends React.Component {
       this.setState({
         saving: true
       }, () => {
-        dispatch(handleSavePost(post))
+        onSavePost(post)
           .then(({data}) => {
-            dispatch(storePost(data));
+            doStorePost(data);
             history.push(`/${category}/${id}`);
           })
           .catch(() => {
@@ -211,10 +211,11 @@ class PostWriteView extends React.Component {
 
 PostWriteView.propTypes = {
   action: PropTypes.string.isRequired,
-  post: PropTypes.object,
-  categories: PropTypes.array,
   history: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  categories: PropTypes.array,
+  post: PropTypes.object,
+  onSavePost: PropTypes.func.isRequired,
+  doStorePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({categories, posts}, props) => {
@@ -245,4 +246,15 @@ const mapStateToProps = ({categories, posts}, props) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(PostWriteView));
+const mapDispatchToProps = (dispatch) => (
+  {
+    onSavePost: (post) => (
+      dispatch(handleSavePost(post))
+    ),
+    doStorePost: (post) => (
+      dispatch(storePost(post))
+    )
+  }
+);
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostWriteView));

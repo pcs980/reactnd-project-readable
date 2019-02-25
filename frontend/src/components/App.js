@@ -19,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 class App extends Component {
 
   componentDidMount() {
-    this.props.dispatch(handleInitialData());
+    this.props.getInitialData();
   }
 
   render() {
@@ -50,7 +50,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  getInitialData: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired
 };
 
@@ -60,4 +60,12 @@ const mapStateToProps = ({loadingBar}) => (
   }
 );
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => (
+  {
+    getInitialData: () => {
+      dispatch(handleInitialData());
+    }
+  }
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

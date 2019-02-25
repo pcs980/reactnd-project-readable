@@ -15,21 +15,23 @@ import {searchPosts, sortPosts} from '../actions/shared';
 class PostListView extends React.Component {
 
   ratePost = (id, option) => {
-    this.props.dispatch(handleRatePost(id, option))
+    const {onRatePost, doStoreRatePost} = this.props;
+
+    onRatePost(id, option)
       .then(() => {
-        this.props.dispatch(ratePost(id, option));
+        doStoreRatePost(id, option);
       })
       .catch(() => {
         showEvent('error', 'Your rate wasn\'t saved. Please, try again later.');
       });
   };
 
-  handleSortPosts = (sortBy) => {
-    this.props.dispatch(sortPosts(sortBy));
+  handleSortPosts = (sortBy, fieldType) => {
+    this.props.doStoreSortPosts(sortBy, fieldType);
   };
 
   clearSearch = () => {
-    this.props.dispatch(searchPosts(''));
+    this.props.doStoreSearchPosts('');
   };
 
   render() {
@@ -51,8 +53,11 @@ class PostListView extends React.Component {
 }
 
 PostListView.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  selectedCategory: PropTypes.string.isRequired
+  onRatePost: PropTypes.func.isRequired,
+  selectedCategory: PropTypes.string.isRequired,
+  doStoreRatePost: PropTypes.func.isRequired,
+  doStoreSearchPosts: PropTypes.func.isRequired,
+  doStoreSortPosts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, props) => {
@@ -64,4 +69,21 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(PostListView));
+const mapDispatchToProps = (dispatch) => (
+  {
+    onRatePost: (id, option) => (
+      dispatch(handleRatePost(id, option))
+    ),
+    doStoreRatePost: (id, option) => (
+      dispatch(ratePost(id, option))
+    ),
+    doStoreSearchPosts: () => (
+      dispatch(searchPosts(''))
+    ),
+    doStoreSortPosts: (sortBy, fieldType) => (
+      dispatch(sortPosts(sortBy, fieldType))
+    )
+  }
+);
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostListView));

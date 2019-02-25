@@ -34,11 +34,11 @@ class PostDetailView extends React.Component {
   };
 
   deletePost = (id) => {
-    const {dispatch, history, post} = this.props;
+    const {doStoreRemovePost, onDeletePost, history, post} = this.props;
     this.closeDeleteConfirm();
-    dispatch(handleDeletePost(id))
+    onDeletePost(id)
       .then(() => {
-        dispatch(removePost(id));
+        doStoreRemovePost(id);
         history.push(`/${post.category}`);
       })
       .catch(() => {
@@ -47,9 +47,9 @@ class PostDetailView extends React.Component {
   };
 
   ratePost = (id, option) => {
-    this.props.dispatch(handleRatePost(id, option))
+    this.props.onRatePost(id, option)
       .then(() => {
-        this.props.dispatch(ratePost(id, option));
+        this.props.doStoreRatePost(id, option);
       })
       .catch(() => {
         showEvent('error', 'Your rate wasn\'t saved. Please, try again later.');
@@ -57,11 +57,11 @@ class PostDetailView extends React.Component {
   };
 
   deleteComment = (id) => {
-    this.props.dispatch(handleDeleteComment(id))
+    this.props.onDeleteComment(id)
       .then(({data}) => {
-        this.props.dispatch(removeComment(id));
+        this.props.doStoreRemoveComment(id);
         // Decrement post's comment count
-        this.props.dispatch(decrementComment(data.parentId));
+        this.props.doStoreDecrementComment(data.parentId);
       })
       .catch(() => {
         showEvent('error', 'The comment wasn\'t deleted. Please, try again later.');
@@ -69,9 +69,9 @@ class PostDetailView extends React.Component {
   };
 
   updateComment = (comment) => {
-    return this.props.dispatch(handleSaveComment(comment))
+    return this.props.onSaveComment(comment)
       .then(({data}) => {
-        this.props.dispatch(storeComment(data));
+        this.props.doStoreComment(data);
       })
       .catch(() => {
         showEvent('error', 'The comment wasn\'t updated. Please, try again later.');
@@ -80,11 +80,11 @@ class PostDetailView extends React.Component {
 
   saveComment = (comment) => {
     comment.parentId = this.props.post.id;
-    return this.props.dispatch(handleSaveComment(comment))
+    return this.props.onSaveComment(comment)
       .then(({data}) => {
-        this.props.dispatch(storeComment(data));
+        this.props.doStoreComment(data);
         // Increment comment count
-        this.props.dispatch(incrementComment(data.parentId));
+        this.props.doStoreIncrementComment(data.parentId);
       })
       .catch(() => {
         showEvent('error', 'The comment wasn\'t saved. Please, try again later.');
@@ -92,9 +92,9 @@ class PostDetailView extends React.Component {
   };
 
   rateComment = (id, option) => {
-    this.props.dispatch(handleRateComment(id, option))
+    this.props.onRateComment(id, option)
       .then(() => {
-        this.props.dispatch(rateComment(id, option));
+        this.props.doStoreRateComment(id, option);
       })
       .catch(() => {
         showEvent('error', 'Your rate wasn\'t saved. Please, try again later.');
@@ -206,11 +206,22 @@ class PostDetailView extends React.Component {
 }
 
 PostDetailView.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
   comments: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  post: PropTypes.object
+  post: PropTypes.object,
+  onDeleteComment: PropTypes.func.isRequired,
+  onDeletePost: PropTypes.func.isRequired,
+  onRateComment: PropTypes.func.isRequired,
+  onRatePost: PropTypes.func.isRequired,
+  onSaveComment: PropTypes.func.isRequired,
+  doStoreComment: PropTypes.func.isRequired,
+  doStoreDecrementComment: PropTypes.func.isRequired,
+  doStoreIncrementComment: PropTypes.func.isRequired,
+  doStoreRateComment: PropTypes.func.isRequired,
+  doStoreRatePost: PropTypes.func.isRequired,
+  doStoreRemoveComment: PropTypes.func.isRequired,
+  doStoreRemovePost: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({comments, posts, loadingBar}, props) => {
@@ -227,4 +238,45 @@ const mapStateToProps = ({comments, posts, loadingBar}, props) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(PostDetailView));
+const mapDispatchToProps = (dispatch) => (
+  {
+    doStoreComment: (id, option) => (
+      dispatch(storeComment(id, option))
+    ),
+    doStoreDecrementComment: (id) => (
+      dispatch(decrementComment(id))
+    ),
+    doStoreIncrementComment: (id) => (
+      dispatch(incrementComment(id))
+    ),
+    doStoreRateComment: (id, option) => (
+      dispatch(rateComment(id, option))
+    ),
+    doStoreRatePost: (id, option) => (
+      dispatch(ratePost(id, option))
+    ),
+    doStoreRemoveComment: (id) => (
+      dispatch(removeComment(id))
+    ),
+    doStoreRemovePost: (id) => (
+      dispatch(removePost(id))
+    ),
+    onDeleteComment: (id) => (
+      dispatch(handleDeleteComment(id))
+    ),
+    onDeletePost: (id) => (
+      dispatch(handleDeletePost(id))
+    ),
+    onRateComment: (id, option) => (
+      dispatch(handleRateComment(id, option))
+    ),
+    onRatePost: (id, option) => (
+      dispatch(handleRatePost(id, option))
+    ),
+    onSaveComment: (comment) => (
+      dispatch(handleSaveComment(comment))
+    )
+  }
+);
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostDetailView));

@@ -13,9 +13,13 @@ const shared = (state = {}, action) => {
       - Keep order when the field has changed
       - Set to ascending if order is undefined
       - Change order only if the field is same
-      */
+
+      Field Type
+      - Numeric or Alphabet
+    */
     return {
       ...state,
+      fieldType: action.fieldType,
       sortBy: action.sortBy,
       order: (action.sortBy !== state.sortBy
         ? state.order

@@ -36,7 +36,7 @@ const PostListControl = (props) => (
           <Menu.Item
             link
             key={param.field}
-            onClick={() => props.sortClick(param.field)}
+            onClick={() => props.sortClick(param.field, param.type)}
             color='orange'
             active={props.sortBy === param.field}>
             <Icon
