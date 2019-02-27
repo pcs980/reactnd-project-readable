@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import CommentForm from '../components/CommentForm';
 
-const EditCommentView = ({comment}) => {
+export const EditCommentView = ({comment}) => {
   return (
     <CommentForm comment={comment}/>
   );

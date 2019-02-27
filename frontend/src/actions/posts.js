@@ -39,7 +39,7 @@ export const storePosts = (posts) => (
 export const handleGetPosts = () => (dispatch) => {
   return getPosts()
     .then((posts) => {
-      dispatch(this.storePosts(posts));
+      dispatch(storePosts(posts));
     })
     .catch((error) => {
       console.error('Error while getting all posts', error);

@@ -20,7 +20,7 @@ const comments = (state = {}, action) => {
   case GET_POST_COMMENTS:
     return {
       ...state,
-      ...action.comments.sort((a, b) => a.timestamp > b.timestamp)
+      ...action.comments
     };
   case RATE_COMMENT:
     return comments.map((comment) => {

@@ -6,7 +6,7 @@ import {Comment, Grid, Header} from 'semantic-ui-react';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
-class CommentList extends React.Component {
+export class CommentList extends React.Component {
   state = {
     editCommentId: undefined
   };

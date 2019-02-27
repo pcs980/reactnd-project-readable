@@ -23,7 +23,7 @@ const sortParameters = [
   }
 ];
 
-const PostListControl = (props) => (
+export const PostListControl = (props) => (
   <Menu fluid secondary pointing size='small' icon>
     <Menu.Item as={Link} to='/post'>
       <Icon name='file'/> New Post

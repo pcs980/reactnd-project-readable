@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Header, Icon, Segment} from 'semantic-ui-react';
 
-const ResourceNotFoundView = (props) => (
+export const ResourceNotFoundView = (props) => (
   <Segment placeholder size='tiny'>
     <Header icon>
       <Icon name='frown outline'/>

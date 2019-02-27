@@ -7,7 +7,7 @@ import Thermometer from './Thermometer';
 import CustomLabel from './CustomLabel';
 import {justDate} from '../utils/format';
 
-const PostItem = (props) => {
+export const PostItem = (props) => {
   const {ratePost} = props;
   const {id, author, title, commentCount, voteScore, category} = props.post;
 

@@ -9,7 +9,7 @@ import middlewares from './middlewares';
 import './index.css';
 import App from './components/App';
 
-const store = createStore(reducers, middlewares);
+export const store = createStore(reducers, middlewares);
 
 ReactDOM.render(
   <Provider store={store}>

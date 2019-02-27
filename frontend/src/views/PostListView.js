@@ -12,7 +12,7 @@ import {showEvent} from '../utils/toastEvent';
 import {handleRatePost, ratePost} from '../actions/posts';
 import {searchPosts, sortPosts} from '../actions/shared';
 
-class PostListView extends React.Component {
+export class PostListView extends React.Component {
 
   ratePost = (id, option) => {
     const {onRatePost, doStoreRatePost} = this.props;
@@ -38,7 +38,9 @@ class PostListView extends React.Component {
     return (
       <Grid columns={2}>
         <Grid.Column width={5}>
-          <CategoryMenu category={this.props.selectedCategory}/>
+          <CategoryMenu
+            searchPosts={this.props.doSearchPosts}
+            category={this.props.selectedCategory}/>
         </Grid.Column>
         <Grid.Column width={11}>
           <PostListControl sortClick={this.handleSortPosts}/>
@@ -55,6 +57,7 @@ class PostListView extends React.Component {
 PostListView.propTypes = {
   onRatePost: PropTypes.func.isRequired,
   selectedCategory: PropTypes.string.isRequired,
+  doSearchPosts: PropTypes.func.isRequired,
   doStoreRatePost: PropTypes.func.isRequired,
   doStoreSearchPosts: PropTypes.func.isRequired,
   doStoreSortPosts: PropTypes.func.isRequired
@@ -73,6 +76,9 @@ const mapDispatchToProps = (dispatch) => (
   {
     onRatePost: (id, option) => (
       dispatch(handleRatePost(id, option))
+    ),
+    doSearchPosts: (search) => (
+      dispatch(searchPosts(search))
     ),
     doStoreRatePost: (id, option) => (
       dispatch(ratePost(id, option))

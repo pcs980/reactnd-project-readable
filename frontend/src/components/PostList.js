@@ -6,7 +6,7 @@ import {Button, Card, Grid, Icon, Segment} from 'semantic-ui-react';
 import PostItem from './PostItem';
 import ResourceNotFoundView from '../views/ResourceNotFoundView';
 
-class PostList extends React.Component {
+export class PostList extends React.Component {
 
   // Sort fields accordingly to it's type (numeric or alphabetic)
   resolveOrder = (a, b) => {
@@ -36,8 +36,8 @@ class PostList extends React.Component {
   render() {
     const {posts, shared, loading, ratePost, clearSearch} = this.props;
 
-    const searchAlertBar =
-      <Segment inverted color='orange'>
+    const searchAlertBar = shared.searchPostByTitle
+      ? <Segment inverted color='orange'>
         <Grid columns={2}>
           <Grid.Row>
             <Grid.Column width={12}>
@@ -56,7 +56,8 @@ class PostList extends React.Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Segment>;
+      </Segment>
+      : null;
 
     if (posts.length === 0 && loading === false) {
       return (

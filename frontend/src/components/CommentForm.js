@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Form, Label, Segment} from 'semantic-ui-react';
 
-class CommentForm extends React.Component {
+export class CommentForm extends React.Component {
   state = {
     id: undefined,
     author: '',

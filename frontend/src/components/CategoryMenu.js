@@ -5,9 +5,7 @@ import {Link, withRouter} from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import {Icon, Input, Label, Menu} from 'semantic-ui-react';
 
-import {searchPosts} from '../actions/shared';
-
-class CategoryMenu extends React.Component {
+export class CategoryMenu extends React.Component {
   state = {
     search: '',
     goneSearch: false
@@ -19,16 +17,16 @@ class CategoryMenu extends React.Component {
       this.setState({
         search: value
       }, () => {
-        this.debounceDispatchSearch(value);
+        this.debounceSearch(value);
       });
     }
   };
 
   // Use debounce to avoid dispatch action at any typing
-  debounceDispatchSearch = debounce((search) => {
+  debounceSearch = debounce((search) => {
     this.setState({
       goneSearch: true
-    }, () => this.props.dispatch(searchPosts(search)));
+    }, () => this.props.searchPosts(search));
   }, 1500);
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -81,7 +79,7 @@ class CategoryMenu extends React.Component {
 CategoryMenu.propTypes = {
   categories: PropTypes.array.isRequired,
   selectedCategory: PropTypes.string,
-  dispatch: PropTypes.func.isRequired
+  searchPosts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = ({categories, posts, shared}, {category}) => {

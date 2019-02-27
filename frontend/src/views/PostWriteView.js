@@ -8,7 +8,7 @@ import {showEvent} from '../utils/toastEvent';
 
 import {handleSavePost, storePost} from '../actions/posts';
 
-class PostWriteView extends React.Component {
+export class PostWriteView extends React.Component {
   state = {
     author: '',
     body: '',
@@ -223,7 +223,7 @@ const mapStateToProps = ({categories, posts}, props) => {
   const action = postId ? 'Edit post' : 'New post';
 
   // Get post by id from list of posts in store
-  const post = Object.values(posts)
+  posts = Object.values(posts)
     .filter((post) => post.id === postId);
 
   // Turn categories into iterable array,
@@ -242,7 +242,7 @@ const mapStateToProps = ({categories, posts}, props) => {
   return {
     action,
     categories,
-    post: post.length > 0 ? post[0] : null
+    post: posts.length > 0 ? posts[0] : null
   };
 };
 

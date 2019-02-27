@@ -15,7 +15,7 @@ import {showEvent} from '../utils/toastEvent';
 import {handleDeleteComment, handleRateComment, handleSaveComment, rateComment, removeComment, storeComment} from '../actions/comments';
 import {handleRatePost, handleDeletePost, ratePost, removePost, decrementComment, incrementComment} from '../actions/posts';
 
-class PostDetailView extends React.Component {
+export class PostDetailView extends React.Component {
 
   state = {
     open: false

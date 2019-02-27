@@ -7,7 +7,7 @@ import Thermometer from './Thermometer';
 import ModalConfirm from './ModalConfirm';
 import {friendlyDate} from '../utils/format';
 
-class CommentItem extends React.Component {
+export class CommentItem extends React.Component {
 
   state = {
     open: false
