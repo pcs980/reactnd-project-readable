@@ -86,6 +86,13 @@ After voting the rating scale changes:
 
 ![Rating scales](public/assets/img/rating-scales.png)
 
+### Demo
+
+Following a short screen capture demonstrating some features in home page:
+
+![Main Demo](public/assets/img/main-screen.gif)
+
+
 ## Known issues
 
 The Comment Form in [Post Detail](#post-detail) have a misbehavior page due to lack of knowledge about Redux.
